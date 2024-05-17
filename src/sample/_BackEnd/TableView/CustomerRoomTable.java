@@ -3,14 +3,14 @@ package sample._BackEnd.TableView;
 public class CustomerRoomTable {
     String ROOMNO;
     String TYPE;
-    String CAPACITY;
+    String NOTE;
     String PRICEDAY;
     String STATUS;
 
-    public CustomerRoomTable(String ROOMNO, String TYPE, String CAPACITY, String PRICEDAY, String STATUS){
+    public CustomerRoomTable(String ROOMNO, String TYPE, String NOTE, String PRICEDAY, String STATUS){
         this.ROOMNO = ROOMNO;
         this.TYPE = TYPE;
-        this.CAPACITY = CAPACITY;
+        this.NOTE = NOTE;
         this.PRICEDAY = PRICEDAY;
         this.STATUS = STATUS;
     }
@@ -31,12 +31,12 @@ public class CustomerRoomTable {
         this.TYPE = TYPE;
     }
 
-    public String getCAPACITY() {
-        return CAPACITY;
+    public String getNOTE() {
+        return NOTE;
     }
 
-    public void setCAPACITY(String CAPACITY) {
-        this.CAPACITY = CAPACITY;
+    public void setNOTE(String NOTE) {
+        this.NOTE = NOTE;
     }
 
     public String getPRICEDAY() {

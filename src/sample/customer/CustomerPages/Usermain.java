@@ -32,7 +32,6 @@ public class Usermain implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         windowLoadStackPane("UserHome.fxml");
         closeWindow.setOnMouseClicked(event -> {
             System.exit(0);

@@ -56,7 +56,7 @@ CREATE TABLE `checkinoutinfo` (
   `NID` varchar(15) DEFAULT NULL,
   `ROOMNO` varchar(15) DEFAULT NULL,
   `ROOMTYPE` varchar(15) DEFAULT NULL,
-  `CAPACITY` varchar(15) DEFAULT NULL,
+  `NOTE` varchar(255) DEFAULT NULL,
   `CHECKEDIN` varchar(20) DEFAULT NULL,
   `CHECKEDOUT` varchar(20) DEFAULT NULL,
   `PRICEDAY` varchar(30) DEFAULT NULL,
@@ -142,9 +142,9 @@ DROP TABLE IF EXISTS `roominfo`;
 CREATE TABLE `roominfo` (
   `ROOM_NO` varchar(30) NOT NULL,
   `TYPE` varchar(10) DEFAULT NULL,
-  `CAPACITY` varchar(10) DEFAULT NULL,
   `PRICE_DAY` varchar(30) DEFAULT NULL,
   `STATUS` varchar(12) DEFAULT NULL,
+  `NOTE` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ROOM_NO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -155,9 +155,42 @@ CREATE TABLE `roominfo` (
 
 LOCK TABLES `roominfo` WRITE;
 /*!40000 ALTER TABLE `roominfo` DISABLE KEYS */;
-INSERT INTO `roominfo` VALUES ('1','AC','Single','1500','Booked'),('11','Non-Ac','Double','500','Booked'),('111','AC','Double','1000','Booked'),('12','12','12','12','Booked'),('123','1222','222','222','Booked'),('13','Ac','12','12','Available'),('2','AC-Room','Double','2000','Available'),('3','AC','Double','600','Available'),('9','9','9','9','Available');
+INSERT INTO roominfo (ROOM_NO, TYPE, PRICE_DAY, STATUS, NOTE) VALUES
+                                                                         ('101A', 'Single', '100', 'Available', 'Near elevator'),
+                                                                         ('102B', 'Double', '150', 'Occupied', 'Ocean view'),
+                                                                         ('103C', 'Suite', '300', 'Available', 'Newly renovated'),
+                                                                         ('104D', 'Single', '110', 'Occupied', 'Extra pillows requested'),
+                                                                         ('105E', 'Double', '160', 'Available', 'Includes breakfast'),
+                                                                         ('106F', 'Suite', '350', 'Maintenance', 'Undergoing maintenance'),
+                                                                         ('107G', 'Single', '95', 'Available', 'Close to lobby'),
+                                                                         ('108H', 'Double', '145', 'Occupied', 'Long-term stay discount'),
+                                                                         ('109I', 'Suite', '320', 'Available', 'Top floor, best view'),
+                                                                         ('110J', 'Single', '105', 'Available', 'Quiet corner room');
+
 /*!40000 ALTER TABLE `roominfo` ENABLE KEYS */;
 UNLOCK TABLES;
+--
+-- --
+-- -- Table structure for table `roomrentalform`
+-- --
+--
+-- DROP TABLE IF EXISTS `roomrentalform`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `roomrentalform` (
+--   'ROOMFORM_NO' varchar(30) NOT NULL,
+--   `ROOM_NO` varchar(30) DEFAULT NULL,
+--   'STARTDAY' date DEFAULT NULL,
+--   'NAME' varchar(30) DEFAULT NULL,
+--   'CUSTOMER_TYPE' varchar(30) DEFAULT NULL,
+--   'CUSTOMER_ID' varchar(12) DEFAULT NULL,
+--   'CUSTOMER_ADDRESS' varchar(30) DEFAULT NULL,
+--   PRIMARY KEY (`ROOMFORM_NO`)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- /*!40101 SET character_set_client = @saved_cs_client */;
+--
+
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

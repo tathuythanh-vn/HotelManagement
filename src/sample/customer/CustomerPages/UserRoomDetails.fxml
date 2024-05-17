@@ -13,9 +13,9 @@
         <columns>
           <TableColumn fx:id="roomNoCol" prefWidth="124.0" text="Room No" />
           <TableColumn fx:id="roomTypeCol" prefWidth="108.0" text="Type" />
-            <TableColumn fx:id="roomCapacityCol" prefWidth="113.0" text="Capacity" />
             <TableColumn fx:id="price_DayCol" prefWidth="122.0" text="Price/Day" />
             <TableColumn fx:id="roomStatusCol" minWidth="0.0" prefWidth="139.0" text="Room Status" />
+            <TableColumn fx:id="roomNote" prefWidth="113.0" text="Note" />
         </columns>
       </TableView>
       <AnchorPane layoutX="218.0" layoutY="18.0" prefHeight="25.0" prefWidth="193.0">

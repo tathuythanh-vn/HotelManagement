@@ -31,12 +31,12 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="283.0" layoutY="129.0" prefHeight="25.0" prefWidth="94.0" text="Capacity         :">
+                  <Label layoutX="283.0" layoutY="129.0" prefHeight="25.0" prefWidth="94.0" text="Note             :">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roomCapacityField" layoutX="377.0" layoutY="129.0" prefHeight="25.0" prefWidth="130.0">
+                  <Label fx:id="roomNoteField" layoutX="377.0" layoutY="129.0" prefHeight="25.0" prefWidth="130.0">
                      <font>
                         <Font size="13.0" />
                      </font>

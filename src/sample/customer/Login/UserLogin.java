@@ -66,7 +66,7 @@ public class UserLogin implements Initializable {
     public void UserSignup(ActionEvent mouseEvent) throws IOException {
         CommonTask.pageNavigation("UserSignup.fxml", Main.stage ,this.getClass(),"User Signup", 600, 400);
     }
-@FXML
+    @FXML
     public void BackToMain(ActionEvent mouseEvent) throws IOException {
         CommonTask.pageNavigation("/sample/sample.fxml", Main.stage,this.getClass(),"Hotel Management System", 600, 400);
     }

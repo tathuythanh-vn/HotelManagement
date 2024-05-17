@@ -4,21 +4,16 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import sample.Main;
 import sample._BackEnd.CommonTask;
 import sample._BackEnd.DBConnection;
 
-import javax.print.DocFlavor;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,11 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static sample._BackEnd.DBConnection.connection;
 import static sample.customer.Login.UserLogin.currentCustomerNID;
 public class UserCheckIn implements Initializable {
 
-    public Label roomCapacityField;
+    public Label roomNoteField;
     public Label roomTypeField;
     public Label roomPriceField;
     public AnchorPane userCheckInPane;
@@ -62,15 +56,15 @@ public class UserCheckIn implements Initializable {
         String Address = UserAddressField.getText();
         String RoomNo = userRoomChoicebox.getValue()+"";
         String CheckInDate = UserCheckIndate.getValue()+"";
-        String roomCapacity = roomCapacityField.getText()+"";
+        String roomNote = roomNoteField.getText()+"";
         String roomType = roomTypeField.getText()+"";
         String roomPrice = roomPriceField.getText()+"";
         Connection connection = DBConnection.getConnections();
-        if (roomType.equals("") || roomPrice.equals("") || roomCapacity.equals("") || CheckInDate.equals("null")) {
+        if (roomType.equals("") || roomPrice.equals("") || roomNote.equals("") || CheckInDate.equals("null")) {
 //            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
             CommonTask.showJFXAlert(rootPane, userCheckInPane, "warning", "Warning!", "Field Can't be Empty!", JFXDialog.DialogTransition.CENTER);
         } else {
-            String sql = "INSERT INTO CHECKINOUTINFO (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, CAPACITY, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO CHECKINOUTINFO (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, NOTE, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, NID);
@@ -80,11 +74,11 @@ public class UserCheckIn implements Initializable {
             preparedStatement.setString(6, RoomNo);
             preparedStatement.setString(7, CheckInDate);
             preparedStatement.setString(8, roomType);
-            preparedStatement.setString(9, roomCapacity);
+            preparedStatement.setString(9, roomNote);
             preparedStatement.setString(10, roomPrice);
             try{
                 preparedStatement.execute();
-                String sql1 = "UPDATE ROOMINFO SET STATUS = 'Booked' WHERE ROOM_NO = ?";
+                String sql1 = "UPDATE ROOMINFO SET STATUS = 'Occupied' WHERE ROOM_NO = ?";
                 PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
                 preparedStatement1.setString(1, RoomNo);
                 preparedStatement1.execute();
@@ -119,11 +113,11 @@ public class UserCheckIn implements Initializable {
                 statement.setString(1, roomNo);
                 ResultSet resultSet = statement.executeQuery();
                 if(resultSet.next()){
-                    String roomCapacity = resultSet.getString("CAPACITY");
+                    String roomNote = resultSet.getString("NOTE");
                     String roomType = resultSet.getString("TYPE");
                     String roomPriceDay = resultSet.getString("PRICE_DAY");
 
-                    roomCapacityField.setText(roomCapacity);
+                    roomNoteField.setText(roomNote);
                     roomPriceField.setText(roomPriceDay);
                     roomTypeField.setText(roomType);
                 } else {
@@ -195,7 +189,7 @@ public class UserCheckIn implements Initializable {
 
     private void clearTextFields() {
         roomTypeField.setText("");
-        roomCapacityField.setText("");
+        roomNoteField.setText("");
         roomPriceField.setText("");
         UserCheckIndate.getEditor().clear();
 //        roomChoiceBox.setValue(null);
