@@ -1,9 +1,11 @@
 package sample.customer.CustomerPages.CustomerInfo;
 
 import com.jfoenix.controls.JFXDialog;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -30,6 +32,7 @@ public class UserInfoEdit implements Initializable {
     public Button UserConfirm;
     public StackPane rootPane;
     public AnchorPane rootAnchorPane;
+//    public FontAwesomeIconView minimizeWindow;
     @FXML
     private TextField UserNameEdit;
 
@@ -88,6 +91,19 @@ public class UserInfoEdit implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setCustomerInfo();
+//        minimizeWindow.setOnMouseClicked(event -> {
+//            System.exit(0);
+//        });
+
+//        minimizeWindow.setOnMouseClicked(event -> {
+//            minimizeStageOfNode((Node) event.getSource());
+//        });
+//
+////        AtomicInteger maxWindow = new AtomicInteger();
+//        maximizeWindow.setOnMouseClicked(event -> {
+//            Stage stage1 = (Stage) userMainPane.getScene().getWindow();
+//            stage1.setMaximized(!stage1.isMaximized());
+//        });
     }
 
     public void setCustomerInfo(){

@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.customer.CustomerPages.Usermain">
+<StackPane fx:id="rootPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.customer.CustomerPages.UserMain">
    <children>
       <AnchorPane fx:id="userMainPane" prefHeight="400.0" prefWidth="800.0">
          <children>

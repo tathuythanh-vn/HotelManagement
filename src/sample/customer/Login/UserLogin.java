@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXDialog;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -33,7 +32,7 @@ public class UserLogin implements Initializable {
     public AnchorPane rootAnchorPane;
 
     @FXML
-    public void UserLoginn(ActionEvent actionEvent) throws IOException, SQLException {
+    public void UserLogin(ActionEvent actionEvent) throws IOException, SQLException {
         Connection connection = DBConnection.getConnections();
         String customerNID = customerNIDField.getText();
         currentCustomerNID = customerNID;

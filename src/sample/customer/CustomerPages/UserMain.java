@@ -1,6 +1,5 @@
 package sample.customer.CustomerPages;
 
-import com.jfoenix.controls.JFXDialog;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -9,15 +8,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import sample._BackEnd.CommonTask;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static sample._BackEnd.CommonTask.newStage;
-
-public class Usermain implements Initializable {
+public class UserMain implements Initializable {
 
     public BorderPane borderpane;
     public Button goHomeID;
@@ -41,7 +37,7 @@ public class Usermain implements Initializable {
             minimizeStageOfNode((Node) event.getSource());
         });
 
-        AtomicInteger maxWindow = new AtomicInteger();
+//        AtomicInteger maxWindow = new AtomicInteger();
         maximizeWindow.setOnMouseClicked(event -> {
             Stage stage1 = (Stage) userMainPane.getScene().getWindow();
             stage1.setMaximized(!stage1.isMaximized());

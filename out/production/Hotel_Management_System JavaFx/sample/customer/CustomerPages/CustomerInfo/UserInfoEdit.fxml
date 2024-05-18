@@ -147,9 +147,9 @@
                <children>
                   <HBox layoutX="450.0" prefHeight="30.0" prefWidth="100.0" styleClass="closePane">
                      <children>
-                        <FontAwesomeIconView glyphName="CIRCLE" size="18" styleClass="minimizeIcon" />
-                        <FontAwesomeIconView glyphName="CIRCLE" layoutX="10.0" layoutY="20.0" size="18" styleClass="maximizeIcon" />
-                        <FontAwesomeIconView glyphName="CIRCLE" layoutX="22.0" layoutY="20.0" size="18" styleClass="closeIcon" />
+                        <FontAwesomeIconView fx:id="minimizeWindow"  glyphName="CIRCLE" size="18" styleClass="minimizeIcon" />
+                        <FontAwesomeIconView fx:id="maxmizeWindow" glyphName="CIRCLE" layoutX="10.0" layoutY="20.0" size="18" styleClass="maximizeIcon" />
+                        <FontAwesomeIconView fx:id="closeWindow" glyphName="CIRCLE" layoutX="22.0" layoutY="20.0" size="18" styleClass="closeIcon" />
                      </children>
                   </HBox>
                   <HBox prefHeight="30.0" prefWidth="132.0" styleClass="titlePane">
