@@ -48,6 +48,12 @@ public class UserInfo implements Initializable {
     private Label UserAddressLabel;
 
     @FXML
+    private Label CitizenIDLabel;
+
+    @FXML
+    private Label CustomerTypeIDLabel;
+
+    @FXML
     void UserBackToHome(ActionEvent event) throws IOException {
         Stage stage = (Stage) UserBackToHome.getScene().getWindow();
         stage.close();
@@ -83,6 +89,8 @@ public class UserInfo implements Initializable {
                     String customerPhone = resultSet.getString("PHONE");
                     String customerPassword = resultSet.getString("PASSWORD");
                     String customerAddress = resultSet.getString("ADDRESS");
+                    String citizenID = resultSet.getString("CITIZENID");
+                    String customerTypeID = resultSet.getString("CUSTOMERTYPE_ID");
 
                     UserNameLabel.setText(customerName);
                     UserNIDlabel.setText(customerNID);
@@ -90,6 +98,8 @@ public class UserInfo implements Initializable {
                     UserPhoneLabel.setText(customerPhone);
                     UserPasswordLabel.setText(customerPassword);
                     UserAddressLabel.setText(customerAddress);
+                    CitizenIDLabel.setText(citizenID);
+                    CustomerTypeIDLabel.setText(customerTypeID);
                 } else {
                     CommonTask.showAlert(Alert.AlertType.ERROR, "ERROR", "Can't get/set Info!");
                 }

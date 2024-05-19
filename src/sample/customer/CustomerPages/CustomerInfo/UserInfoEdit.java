@@ -1,5 +1,6 @@
 package sample.customer.CustomerPages.CustomerInfo;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDialog;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ public class UserInfoEdit implements Initializable {
     public Button UserConfirm;
     public StackPane rootPane;
     public AnchorPane rootAnchorPane;
-//    public FontAwesomeIconView minimizeWindow;
+
     @FXML
     private TextField UserNameEdit;
 
@@ -49,7 +50,13 @@ public class UserInfoEdit implements Initializable {
     private TextField UserPassEdit;
 
     @FXML
-    private TextArea UserAddressEdit;
+    private TextField UserAddressEdit;
+
+    @FXML
+    private TextField CitizenIDEdit;
+
+    @FXML
+    private JFXComboBox CustomerTypeIDChoicebox;
 
     public static boolean editedFlag = false;
 
@@ -62,6 +69,7 @@ public class UserInfoEdit implements Initializable {
         String customerEmail = UserEmailEdit.getText();
         String customerPhone = UserPhoneEdit.getText();
         String customerAddress = UserAddressEdit.getText();
+
 //        System.out.println(customerPhone);
         if (customerName.isEmpty() || customerNID.isEmpty() || customerPassword.isEmpty() || customerEmail.isEmpty() || customerAddress.isEmpty() || customerPhone.isEmpty()) {
             CommonTask.showJFXAlert(rootPane, rootAnchorPane, "warning", "Warning!", "Text field can't be empty!", JFXDialog.DialogTransition.CENTER);
