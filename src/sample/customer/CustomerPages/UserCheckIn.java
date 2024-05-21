@@ -29,6 +29,7 @@ public class UserCheckIn implements Initializable {
     public Label roomNoteField;
     public Label roomTypeField;
     public Label roomPriceField;
+    public Label roomStatusField;
     public AnchorPane userCheckInPane;
     public JFXComboBox userRoomChoicebox;
     public StackPane rootPane;
@@ -57,10 +58,11 @@ public class UserCheckIn implements Initializable {
         String RoomNo = userRoomChoicebox.getValue()+"";
         String CheckInDate = UserCheckIndate.getValue()+"";
         String roomNote = roomNoteField.getText()+"";
+        String roomStatus = roomStatusField.getText()+"";
         String roomType = roomTypeField.getText()+"";
         String roomPrice = roomPriceField.getText()+"";
         Connection connection = DBConnection.getConnections();
-        if (roomType.equals("") || roomPrice.equals("") || roomNote.equals("") || CheckInDate.equals("null")) {
+        if (roomType.equals("") || roomPrice.equals("") || roomStatus.equals("") || CheckInDate.equals("null")) {
 //            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
             CommonTask.showJFXAlert(rootPane, userCheckInPane, "warning", "Warning!", "Field Can't be Empty!", JFXDialog.DialogTransition.CENTER);
         } else {
@@ -76,14 +78,17 @@ public class UserCheckIn implements Initializable {
             preparedStatement.setString(8, roomType);
             preparedStatement.setString(9, roomNote);
             preparedStatement.setString(10, roomPrice);
+
+//            prepare information to add the checkin
             try{
                 preparedStatement.execute();
+
+                //rewrite status of the room
                 String sql1 = "UPDATE ROOMINFO SET STATUS = 'Occupied' WHERE ROOM_NO = ?";
                 PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
                 preparedStatement1.setString(1, RoomNo);
                 preparedStatement1.execute();
 //                CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Check-in Successful!");
-
                 CommonTask.showJFXAlert(rootPane, userCheckInPane, "information", "Successful!", "Check In Successful!", JFXDialog.DialogTransition.CENTER);
             } catch (SQLException e){
                 CommonTask.showJFXAlert(rootPane, userCheckInPane, "information", "Error!", "SQL Exception Happened!", JFXDialog.DialogTransition.CENTER);
@@ -189,6 +194,7 @@ public class UserCheckIn implements Initializable {
 
     private void clearTextFields() {
         roomTypeField.setText("");
+        roomStatusField.setText("");
         roomNoteField.setText("");
         roomPriceField.setText("");
         UserCheckIndate.getEditor().clear();

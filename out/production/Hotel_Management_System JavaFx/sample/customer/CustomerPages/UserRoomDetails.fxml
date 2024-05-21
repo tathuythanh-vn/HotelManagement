@@ -11,8 +11,8 @@
    <children>
       <TableView fx:id="roomTable" layoutX="19.0" layoutY="59.0" prefHeight="294.0" prefWidth="608.0">
         <columns>
-          <TableColumn fx:id="roomNoCol" prefWidth="124.0" text="Room No" />
-          <TableColumn fx:id="roomTypeCol" prefWidth="108.0" text="Type" />
+            <TableColumn fx:id="roomNoCol" prefWidth="124.0" text="Room No" />
+            <TableColumn fx:id="roomTypeCol" prefWidth="108.0" text="Type" />
             <TableColumn fx:id="price_DayCol" prefWidth="122.0" text="Price/Day" />
             <TableColumn fx:id="roomStatusCol" minWidth="0.0" prefWidth="139.0" text="Room Status" />
             <TableColumn fx:id="roomNote" prefWidth="113.0" text="Note" />

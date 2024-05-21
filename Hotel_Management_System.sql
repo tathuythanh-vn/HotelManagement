@@ -135,31 +135,31 @@ CREATE TABLE `roominfo` (
 LOCK TABLES `roominfo` WRITE;
 /*!40000 ALTER TABLE `roominfo` DISABLE KEYS */;
 INSERT INTO `roominfo` (`ROOMNO`, `ROOMTYPE`, `PRICEDAY`, `STATUS`, `NOTE`) VALUES
-('1.1', 'A', '150000', 'AVAILABLE', 'Near window'),
-('1.2', 'A', '150000', 'UNAVAILABLE', 'Good view'),
-('1.3', 'A', '150000', 'AVAILABLE', 'Near elevator'),
-('1.4', 'A', '150000', 'UNAVAILABLE', 'Quiet room'),
+('1.1', 'A', '150000', '', 'Near window'),
+('1.2', 'A', '150000', '', 'Good view'),
+('1.3', 'A', '150000', '', 'Near elevator'),
+('1.4', 'A', '150000', '', 'Quiet room'),
 -- (Add more room numbers for type A up to 22.20, alternating status and notes)
-('22.19', 'A', '150000', 'AVAILABLE', 'Near exit'),
-('22.20', 'A', '150000', 'UNAVAILABLE', 'Good view'),
+('22.19', 'A', '150000', '', 'Near exit'),
+('22.20', 'A', '150000', '', 'Good view'),
 
 -- Room type B
-('1.5', 'B', '170000', 'AVAILABLE', 'Near window'),
-('1.6', 'B', '170000', 'UNAVAILABLE', 'Good view'),
-('1.7', 'B', '170000', 'AVAILABLE', 'Near elevator'),
-('1.8', 'B', '170000', 'UNAVAILABLE', 'Quiet room'),
+('1.5', 'B', '170000', '', 'Near window'),
+('1.6', 'B', '170000', '', 'Good view'),
+('1.7', 'B', '170000', '', 'Near elevator'),
+('1.8', 'B', '170000', '', 'Quiet room'),
 -- (Add more room numbers for type B up to 22.20, alternating status and notes)
-('22.1', 'B', '170000', 'AVAILABLE', 'Near exit'),
-('22.2', 'B', '170000', 'UNAVAILABLE', 'Good view'),
+('22.1', 'B', '170000', '', 'Near exit'),
+('22.2', 'B', '170000', '', 'Good view'),
 
 -- Room type C
-('2.1', 'C', '200000', 'AVAILABLE', 'Near window'),
-('2.2', 'C', '200000', 'UNAVAILABLE', 'Good view'),
-('2.3', 'C', '200000', 'AVAILABLE', 'Near elevator'),
-('2.4', 'C', '200000', 'UNAVAILABLE', 'Quiet room'),
+('2.1', 'C', '200000', '', 'Near window'),
+('2.2', 'C', '200000', '', 'Good view'),
+('2.3', 'C', '200000', '', 'Near elevator'),
+('2.4', 'C', '200000', '', 'Quiet room'),
 -- (Add more room numbers for type C up to 22.20, alternating status and notes)
-('21.19', 'C', '200000', 'AVAILABLE', 'Near exit'),
-('21.20', 'C', '200000', 'UNAVAILABLE', 'Good view');
+('21.19', 'C', '200000', '', 'Near exit'),
+('21.20', 'C', '200000', '', 'Good view');
 /*!40000 ALTER TABLE `roominfo` ENABLE KEYS */;
 UNLOCK TABLES;
 

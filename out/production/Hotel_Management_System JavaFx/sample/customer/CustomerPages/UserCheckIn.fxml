@@ -16,37 +16,47 @@
          <children>
             <Pane layoutX="53.0" layoutY="25.0" prefHeight="323.0" prefWidth="532.0" style="-fx-background-color: rgba(76, 75, 80, 0.4); -fx-background-radius: 25;">
                <children>
-                  <Label layoutX="282.0" layoutY="54.0" prefHeight="19.0" prefWidth="94.0" text="Room number:">
+                  <Label layoutX="282.0" layoutY="27.0" prefHeight="19.0" prefWidth="94.0" text="Room number:">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="283.0" layoutY="89.0" prefHeight="25.0" prefWidth="94.0" text="Room Type    :">
+                  <Label layoutX="282.0" layoutY="66.0" prefHeight="19.0" prefWidth="94.0" text="Room status:">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roomTypeField" layoutX="377.0" layoutY="89.0" prefHeight="25.0" prefWidth="130.0">
+                  <Label layoutX="283.0" layoutY="108.0" prefHeight="25.0" prefWidth="94.0" text="Room Type    :">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="283.0" layoutY="129.0" prefHeight="25.0" prefWidth="94.0" text="Note             :">
+                  <Label fx:id="roomTypeField" layoutX="377.0" layoutY="108.0" prefHeight="25.0" prefWidth="130.0">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roomNoteField" layoutX="377.0" layoutY="129.0" prefHeight="25.0" prefWidth="130.0">
+                  <Label layoutX="283.0" layoutY="148.0" prefHeight="25.0" prefWidth="94.0" text="Note             :">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="283.0" layoutY="172.0" prefHeight="25.0" prefWidth="94.0" text="Price/Day       :">
+                  <Label fx:id="roomNoteField" layoutX="377.0" layoutY="148.0" prefHeight="25.0" prefWidth="130.0">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label fx:id="roomPriceField" layoutX="377.0" layoutY="172.0" prefHeight="25.0" prefWidth="130.0">
+                  <Label fx:id="roomStatusField" layoutX="377.0" layoutY="66.0" prefHeight="25.0" prefWidth="130.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="283.0" layoutY="191.0" prefHeight="25.0" prefWidth="94.0" text="Price/Day       :">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="roomPriceField" layoutX="377.0" layoutY="191.0" prefHeight="25.0" prefWidth="130.0">
                      <font>
                         <Font size="13.0" />
                      </font>
@@ -101,14 +111,14 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="177.0" layoutY="228.0" prefHeight="19.0" prefWidth="94.0" text="Check in Date:">
+                  <Label layoutX="177.0" layoutY="240.0" prefHeight="19.0" prefWidth="94.0" text="Check in Date:">
                      <font>
                         <Font size="13.0" />
                      </font>
                   </Label>
                   <JFXButton layoutX="241.0" layoutY="272.0" onAction="#UserCheckInSubmitBtn" prefHeight="31.0" prefWidth="77.0" style="-fx-background-color: #82eeff; -fx-background-radius: 6; -fx-border-color: gray; -fx-border-radius: 6;" stylesheets="@CSS/userHomeButtonHover.css" text="Check-In" />
-                  <JFXComboBox fx:id="userRoomChoicebox" labelFloat="true" layoutX="375.0" layoutY="50.0" prefHeight="25.0" prefWidth="86.0" styleClass="combo-box" />
-                  <DatePicker fx:id="UserCheckIndate" layoutX="281.0" layoutY="224.0" prefHeight="25.0" prefWidth="133.0" />
+                  <JFXComboBox fx:id="userRoomChoicebox" labelFloat="true" layoutX="375.0" layoutY="23.0" prefHeight="10.0" prefWidth="120.0" styleClass="combo-box" />
+                  <DatePicker fx:id="UserCheckIndate" layoutX="281.0" layoutY="236.0" prefHeight="25.0" prefWidth="133.0" />
                </children>
             </Pane>
          </children>

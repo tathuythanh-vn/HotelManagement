@@ -69,19 +69,23 @@ public class UserInfoEdit implements Initializable {
         String customerEmail = UserEmailEdit.getText();
         String customerPhone = UserPhoneEdit.getText();
         String customerAddress = UserAddressEdit.getText();
+        String citizenID = CitizenIDEdit.getText();
+        String customerType = CustomerTypeIDChoicebox.getValue()+"";
 
 //        System.out.println(customerPhone);
-        if (customerName.isEmpty() || customerNID.isEmpty() || customerPassword.isEmpty() || customerEmail.isEmpty() || customerAddress.isEmpty() || customerPhone.isEmpty()) {
+        if (customerName.isEmpty() || customerNID.isEmpty() || customerPassword.isEmpty() || customerEmail.isEmpty() || customerAddress.isEmpty() || customerPhone.isEmpty() || citizenID.isEmpty() || customerType.isEmpty()) {
             CommonTask.showJFXAlert(rootPane, rootAnchorPane, "warning", "Warning!", "Text field can't be empty!", JFXDialog.DialogTransition.CENTER);
         } else {
-            String sql = "UPDATE CUSTOMERINFO SET NAME = ?, PASSWORD = ?, EMAIL = ?, PHONE = ?, ADDRESS = ? WHERE NID = ?";
+            String sql = "UPDATE CUSTOMERINFO SET SET NAME = ?, NID = ?, PASSWORD = ?, EMAIL = ?, PHONE = ?, ADDRESS = ?, CITIZENID = ?, CUSTOMERTYPEID = ? WHERE NID = ?";
             PreparedStatement preparedStatementUpdate = connection.prepareStatement(sql);
             preparedStatementUpdate.setString(1, customerName);
-            preparedStatementUpdate.setString(2, customerPassword);
-            preparedStatementUpdate.setString(3, customerEmail);
-            preparedStatementUpdate.setString(4, customerPhone);
-            preparedStatementUpdate.setString(5, customerAddress);
-            preparedStatementUpdate.setString(6, currentCustomerNID);
+            preparedStatementUpdate.setString(2, customerNID);
+            preparedStatementUpdate.setString(3, customerPassword);
+            preparedStatementUpdate.setString(4, customerEmail);
+            preparedStatementUpdate.setString(5, customerPhone);
+            preparedStatementUpdate.setString(6, customerAddress);
+            preparedStatementUpdate.setString(7, citizenID);
+            preparedStatementUpdate.setString(8, customerType);
             try {
                 preparedStatementUpdate.execute();
 //                CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Update Successful!");]
@@ -98,20 +102,12 @@ public class UserInfoEdit implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateChoicebox();
         setCustomerInfo();
-//        minimizeWindow.setOnMouseClicked(event -> {
-//            System.exit(0);
-//        });
+    }
 
-//        minimizeWindow.setOnMouseClicked(event -> {
-//            minimizeStageOfNode((Node) event.getSource());
-//        });
-//
-////        AtomicInteger maxWindow = new AtomicInteger();
-//        maximizeWindow.setOnMouseClicked(event -> {
-//            Stage stage1 = (Stage) userMainPane.getScene().getWindow();
-//            stage1.setMaximized(!stage1.isMaximized());
-//        });
+    private void updateChoicebox() {
+        CustomerTypeIDChoicebox.getItems().addAll("DOMESTIC","FOREIGN");
     }
 
     public void setCustomerInfo(){
@@ -123,20 +119,23 @@ public class UserInfoEdit implements Initializable {
                 statement.setString(1, currentCustomerNID);
                 ResultSet resultSet = statement.executeQuery();
                 if(resultSet.next()){
-                    String customerNameSet = resultSet.getString("NAME");
-                    String customerNIDSet = resultSet.getString("NID");
-                    String customerEmailSet = resultSet.getString("EMAIL");
-                    String customerPhoneSet = resultSet.getString("PHONE");
-                    String customerPasswordSet = resultSet.getString("PASSWORD");
-                    String customerAddressSet = resultSet.getString("ADDRESS");
+                    String customerName = resultSet.getString("NAME");
+                    String customerNID = resultSet.getString("NID");
+                    String customerEmail = resultSet.getString("EMAIL");
+                    String customerPhone = resultSet.getString("PHONE");
+                    String customerPassword = resultSet.getString("PASSWORD");
+                    String customerAddress = resultSet.getString("ADDRESS");
+                    String citizenID = resultSet.getString("CITIZENID");
+                    String customerTypeID = resultSet.getString("CUSTOMERTYPEID");
 
-                    UserNameEdit.setText(customerNameSet);
-                    UserNidEdit.setText(customerNIDSet);
-                    UserNidEdit.setDisable(true);
-                    UserEmailEdit.setText(customerEmailSet);
-                    UserPhoneEdit.setText(customerPhoneSet);
-                    UserPassEdit.setText(customerPasswordSet);
-                    UserAddressEdit.setText(customerAddressSet);
+                    UserNameEdit.setText(customerName);
+                    UserNidEdit.setText(customerNID);
+                    UserEmailEdit.setText(customerEmail);
+                    UserPhoneEdit.setText(customerPhone);
+                    UserPassEdit.setText(customerPassword);
+                    UserAddressEdit.setText(customerAddress);
+                    CitizenIDEdit.setText(citizenID);
+                    CustomerTypeIDChoicebox.setValue(customerTypeID);
                 } else {
 //                    CommonTask.showAlert(Alert.AlertType.ERROR, "ERROR", "Can't get/set Info!");
                     CommonTask.showJFXAlert(rootPane, rootAnchorPane, "ERROR", "ERROR!", "Connection Problem!", JFXDialog.DialogTransition.CENTER);

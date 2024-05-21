@@ -90,7 +90,7 @@ public class UserInfo implements Initializable {
                     String customerPassword = resultSet.getString("PASSWORD");
                     String customerAddress = resultSet.getString("ADDRESS");
                     String citizenID = resultSet.getString("CITIZENID");
-                    String customerTypeID = resultSet.getString("CUSTOMERTYPE_ID");
+                    String customerTypeID = resultSet.getString("CUSTOMERTYPEID");
 
                     UserNameLabel.setText(customerName);
                     UserNIDlabel.setText(customerNID);

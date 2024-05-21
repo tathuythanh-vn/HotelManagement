@@ -83,7 +83,7 @@
                         </DropShadow>
                      </effect>
                   </Label>
-                  <Label layoutX="281.0" layoutY="120.0" prefHeight="25.0" prefWidth="70.0" text="CitizenID:">
+                  <Label layoutX="281.0" layoutY="120.0" prefHeight="25.0" prefWidth="70.0" text="CitizenID  :">
                      <effect>
                         <DropShadow>
                            <color>
@@ -146,17 +146,25 @@
                         </DropShadow>
                      </effect>
                   </TextField>
-                  <TextField fx:id="UserAddressEdit" layoutX="350.0" layoutY="78.0" prefHeight="77.0" prefWidth="149.0">
-                     <padding>
-                        <Insets left="6.0" />
-                     </padding>
+                  <TextField fx:id="UserAddressEdit" layoutX="350.0" layoutY="78.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
+                     <effect>
+                        <DropShadow>
+                           <color>
+                              <Color opacity="0.05652173236012459" />
+                           </color>
+                        </DropShadow>
+                     </effect>
                   </TextField>
-                  <TextField fx:id="CitizenIDEdit" layoutX="350.0" layoutY="120.0" prefHeight="77.0" prefWidth="149.0">
-                     <padding>
-                        <Insets left="6.0" />
-                     </padding>
+                  <TextField fx:id="CitizenIDEdit" layoutX="350.0" layoutY="120.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
+                     <effect>
+                        <DropShadow>
+                           <color>
+                              <Color opacity="0.05652173236012459" />
+                           </color>
+                        </DropShadow>
+                     </effect>
                   </TextField>
-                  <JFXComboBox fx:id="CustomerTypeIDChoicebox" labelFloat="true" layoutX="350.0" layoutY="160.0" prefHeight="25.0" prefWidth="86.0" styleClass="combo-box" />
+                  <JFXComboBox fx:id="CustomerTypeIDChoicebox" labelFloat="true" layoutX="350.0" layoutY="160.0" prefHeight="25.0" prefWidth="150.0" styleClass="combo-box" />
 
                   <Button layoutX="292.0" layoutY="227.0" mnemonicParsing="false" onAction="#BackBtn" prefHeight="25.0" prefWidth="64.0" text="Back">
                      <effect>
