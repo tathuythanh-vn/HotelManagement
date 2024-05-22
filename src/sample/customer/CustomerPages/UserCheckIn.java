@@ -15,10 +15,7 @@ import sample._BackEnd.CommonTask;
 import sample._BackEnd.DBConnection;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -46,7 +43,15 @@ public class UserCheckIn implements Initializable {
     @FXML
     public DatePicker UserCheckIndate;
 
+    int maxPeople;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        findMaxPeople();
+        updateChoiceBox();
+        setAndShowCustomerInfo();
+        userRoomChoicebox.setOnAction(this::setRoomInfo);
+    }
 
     @FXML
     void UserCheckInSubmitBtn(ActionEvent event) throws SQLException {
@@ -66,18 +71,10 @@ public class UserCheckIn implements Initializable {
 //            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
             CommonTask.showJFXAlert(rootPane, userCheckInPane, "warning", "Warning!", "Field Can't be Empty!", JFXDialog.DialogTransition.CENTER);
         } else {
-            String sql = "INSERT INTO CHECKINOUTINFO (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, NOTE, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?,?)";
+            //here
+            String sql = "INSERT INTO ROOMRENTALFORMDETAIL (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, NOTE, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, NID);
-            preparedStatement.setString(3, Email);
-            preparedStatement.setString(4, Phone);
-            preparedStatement.setString(5, Address);
-            preparedStatement.setString(6, RoomNo);
-            preparedStatement.setString(7, CheckInDate);
-            preparedStatement.setString(8, roomType);
-            preparedStatement.setString(9, roomNote);
-            preparedStatement.setString(10, roomPrice);
+
 
 //            prepare information to add the checkin
             try{
@@ -100,12 +97,28 @@ public class UserCheckIn implements Initializable {
         clearTextFields();
     }
 
+    private void findMaxPeople() {
+        Connection connection = DBConnection.getConnections();
+        try {
+            if (!connection.isClosed()){
+                String sql = "SELECT PARAMETERVALUE FROM PARAMETERS WHERE PARAMETERNAME = ?";
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        updateChoiceBox();
-        setAndShowCustomerInfo();
-        userRoomChoicebox.setOnAction(this::setRoomInfo);
+                // Create PreparedStatement
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, "MAXCUSTOMER");
+
+                // Execute query
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()){
+                    maxPeople = resultSet.getInt("PARAMETERVALUE");
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnections();
+        }
     }
 
     public void setRoomInfo(Event event) {
@@ -120,7 +133,7 @@ public class UserCheckIn implements Initializable {
                 if(resultSet.next()){
                     String roomNote = resultSet.getString("NOTE");
                     String roomType = resultSet.getString("TYPE");
-                    String roomPriceDay = resultSet.getString("PRICE_DAY");
+                    String roomPriceDay = resultSet.getString("PRICEDAY");
 
                     roomNoteField.setText(roomNote);
                     roomPriceField.setText(roomPriceDay);
@@ -142,12 +155,21 @@ public class UserCheckIn implements Initializable {
         Connection connection = DBConnection.getConnections();
         try{
             if(!connection.isClosed()) {
+
                 String sql = "SELECT * FROM ROOMINFO WHERE STATUS = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, "Available");
-                ResultSet resultSet = statement.executeQuery();
-                while(resultSet.next()){
-                    rooms.add(resultSet.getString("ROOM_NO"));
+
+                int[] status = new int[maxPeople];
+                for (int i = 0; i < maxPeople; i++) {
+                    status[i] = i;
+                }
+
+                for (int i : status) {
+                    statement.setString(1, String.valueOf(i));
+                    ResultSet resultSet = statement.executeQuery();
+                    while (resultSet.next()) {
+                        rooms.add(resultSet.getString("ROOMNO"));
+                    }
                 }
             }
         } catch (SQLException e){
@@ -172,15 +194,14 @@ public class UserCheckIn implements Initializable {
                     String customerNID = resultSet.getString("NID");
                     String customerEmail = resultSet.getString("EMAIL");
                     String customerPhone = resultSet.getString("PHONE");
-                    //String customerPassword = resultSet.getString("PASSWORD");
                     String customerAddress = resultSet.getString("ADDRESS");
 
                     UserNameField.setText(customerName);
                     UserNIDField.setText(customerNID);
                     UserEmailField.setText(customerEmail);
                     UserPhoneField.setText(customerPhone);
-                    //UserPasswordLabel.setText(customerPassword);
                     UserAddressField.setText(customerAddress);
+
                 } else {
                     CommonTask.showAlert(Alert.AlertType.ERROR, "ERROR", "SQL connection Error!");
                 }
