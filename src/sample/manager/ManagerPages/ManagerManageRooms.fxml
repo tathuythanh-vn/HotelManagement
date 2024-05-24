@@ -40,6 +40,8 @@
       <JFXTextField fx:id="roomNoField" focusColor="#76ff9d" labelFloat="true" layoutX="44.0" layoutY="59.0" prefHeight="25.0" prefWidth="149.0" promptText="Room Number" unFocusColor="#9ef2ff" />
       <JFXTextField fx:id="roomTypeField" focusColor="#76ff9d" labelFloat="true" layoutX="246.0" layoutY="58.0" prefHeight="25.0" prefWidth="149.0" promptText="Room Type" unFocusColor="#9ef2ff" />
       <JFXTextField fx:id="bedCapacityField" focusColor="#76ff9d" labelFloat="true" layoutX="44.0" layoutY="106.0" prefHeight="25.0" prefWidth="149.0" promptText="Bed Capacity" unFocusColor="#9ef2ff" />
+<!--
       <JFXTextField fx:id="price_dayField" focusColor="#76ff9d" labelFloat="true" layoutX="246.0" layoutY="106.0" prefHeight="25.0" prefWidth="149.0" promptText="Price/Day" unFocusColor="#9ef2ff" />
+-->
    </children>
 </AnchorPane>

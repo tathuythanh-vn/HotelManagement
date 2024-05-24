@@ -48,7 +48,9 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
     public JFXComboBox roomStatusChoiceBox;
     public JFXTextField roomTypeField;
     public JFXTextField bedCapacityField;
+/*
     public JFXTextField price_dayField;
+*/
     public JFXTextField roomNoField;
     public TableColumn actionCol;
 
@@ -61,19 +63,23 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
         String roomNo = roomNoField.getText();
         String bedCapacity = bedCapacityField.getText();
         String roomType = roomTypeField.getText();
+/*
         String price_day = price_dayField.getText();
+*/
         String roomStatus = roomStatusChoiceBox.getValue()+"";
 
-        if (roomNo.isEmpty() || bedCapacity.isEmpty()  || roomType.isEmpty() || price_day.isEmpty() || roomStatus.equals("null")) {
+        if (roomNo.isEmpty() || bedCapacity.isEmpty()  || roomType.isEmpty()  || roomStatus.equals("null")) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
         } else {
-            String sql = "INSERT INTO ROOMINFO (ROOM_NO, TYPE, CAPACITY, PRICE_DAY, STATUS) VALUES(?,?,?,?,?)";
+            String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, NOTE, STATUS) VALUES(?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, roomNo);
             preparedStatement.setString(2, roomType);
             preparedStatement.setString(3, bedCapacity);
+/*
             preparedStatement.setString(4, price_day);
-            preparedStatement.setString(5, roomStatus);
+*/
+            preparedStatement.setString(4, roomStatus);
             try{
                 preparedStatement.execute();
                 CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Room Added Successfully!");
@@ -91,7 +97,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         roomStatusChoiceBox.getItems().setAll(roomStats);
         roomNoCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("ROOMNO"));
-        roomTypeCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("TYPE"));
+        roomTypeCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("ROOMTYPE"));
         roomCapacityCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("CAPACITY"));
         price_DayCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("PRICEDAY"));
         roomStatusCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("STATUS"));
@@ -108,13 +114,13 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()){
-                    String ROOMNO = resultSet.getString("ROOM_NO"); //SQL COL NAMES NID
-                    String TYPE = resultSet.getString("TYPE");
+                    String ROOMNO = resultSet.getString("ROOMNO"); //SQL COL NAMES NID
+                    String ROOMTYPE = resultSet.getString("ROOMTYPE");
                     String CAPACITY = resultSet.getString("CAPACITY");
                     String PRICEDAY = resultSet.getString("PRICE_DAY");
                     String STATUS = resultSet.getString("STATUS");
 
-                    ManagerRoomTable roomTablee = new ManagerRoomTable(ROOMNO, TYPE, CAPACITY, PRICEDAY, STATUS);
+                    ManagerRoomTable roomTablee = new ManagerRoomTable(ROOMNO, ROOMTYPE, CAPACITY, PRICEDAY, STATUS);
 
                     TABLEROW.add(roomTablee);
                 }
@@ -249,7 +255,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
             Connection connection = getConnections();
             try {
                 if (!connection.isClosed()) {
-                    String sql = "DELETE FROM RoomInfo where ROOM_NO=?";
+                    String sql = "DELETE FROM RoomInfo where ROOMNO=?";
                     PreparedStatement statement = connection.prepareStatement(sql);
                     statement.setString(1, managerRoomTable.getROOMNO());
 

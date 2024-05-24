@@ -29,14 +29,14 @@ public class AdminAddEmployee {
         if (employeeName.isEmpty() || employeeNID.isEmpty() || employeePassword.isEmpty() || employeeEmail.isEmpty() || employeeAddress.isEmpty() || employeePhone.isEmpty()) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
         } else {
-            String sql = "INSERT INTO EMPLOYEEINFO(NAME, NID, PASSWORD, EMAIL, PHONE, ADDRESS) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO EMPLOYEEINFO(NAME, NID, PASSWORD, EMAIL, ADDRESS, PHONE) VALUES(?,?,?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, employeeName);
             preparedStatement.setString(2, employeeNID);
             preparedStatement.setString(3, employeePassword);
             preparedStatement.setString(4, employeeEmail);
-            preparedStatement.setString(5, employeePhone);
-            preparedStatement.setString(6, employeeAddress);
+            preparedStatement.setString(5, employeeAddress);
+            preparedStatement.setString(6, employeePhone);
             try{
                 preparedStatement.execute();
                 CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Employee created!");
