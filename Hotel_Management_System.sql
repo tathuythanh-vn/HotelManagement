@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
--- Host: localhost    Database: HMS0
+-- Host: localhost    Database: HMS1
 -- ------------------------------------------------------
 -- Server version	8.0.25
 
@@ -33,7 +33,7 @@ CREATE TABLE `admininfo` (
 --
 LOCK TABLES `admininfo` WRITE;
 /*!40000 ALTER TABLE `admininfo` DISABLE KEYS */;
-INSERT INTO `admininfo` (`NID`,`NAME`,`NAME`) VALUES ('123','admin','admin'),('admin','admin','admin'),('root','admin','admin');
+INSERT INTO `admininfo` (`NID`,`NAME`,`PASSWORD`) VALUES ('123','admin','admin'),('admin','admin','admin'),('root','admin','admin');
 /*!40000 ALTER TABLE `admininfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,8 +85,7 @@ CREATE TABLE `customerinfo` (
 --
 LOCK TABLES `customerinfo` WRITE;
 /*!40000 ALTER TABLE `customerinfo` DISABLE KEYS */;
-INSERT INTO `customerinfo` (NAME, NID, PASSWORD, EMAIL, PHONE, ADDRESS, CITIZENID, CUSTOMERTYPEID) VALUES
-('mursalin','mursalin','mursalin','mursalin@gmail.com','0123456789','India','123456789','FOREIGN')
+INSERT INTO `customerinfo` VALUES ('mursalin','mursalin','mursalin','mursalin@gmail.com','0123456789','India','123456789','FOREIGN');
 /*!40000 ALTER TABLE `customerinfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,9 +107,9 @@ CREATE TABLE `customertype` (
 --
 LOCK TABLES `customertype` WRITE;
 /*!40000 ALTER TABLE `customertype` DISABLE KEYS */;
-INSERT INTO `customertype` (`CUSTOMERTYPEID`,`CUSTOMERTYPENAME`,`CUSTOMERSURCHARGERATE`) VALUES
+INSERT INTO `customertype` VALUES
 ('DOMESTIC','Khách trong nước','1'),
-('FOREIGN','Khách nước ngoài','1.5')
+('FOREIGN','Khách nước ngoài','1.5');
 /*!40000 ALTER TABLE `customertype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,32 +133,22 @@ CREATE TABLE `roominfo` (
 --
 LOCK TABLES `roominfo` WRITE;
 /*!40000 ALTER TABLE `roominfo` DISABLE KEYS */;
-INSERT INTO `roominfo` (`ROOMNO`, `ROOMTYPE`, `PRICEDAY`, `STATUS`, `NOTE`) VALUES
-('1.1', 'A', '150000', '', 'Near window'),
-('1.2', 'A', '150000', '', 'Good view'),
-('1.3', 'A', '150000', '', 'Near elevator'),
-('1.4', 'A', '150000', '', 'Quiet room'),
--- (Add more room numbers for type A up to 22.20, alternating status and notes)
-('22.19', 'A', '150000', '', 'Near exit'),
-('22.20', 'A', '150000', '', 'Good view'),
-
--- Room type B
-('1.5', 'B', '170000', '', 'Near window'),
-('1.6', 'B', '170000', '', 'Good view'),
-('1.7', 'B', '170000', '', 'Near elevator'),
-('1.8', 'B', '170000', '', 'Quiet room'),
--- (Add more room numbers for type B up to 22.20, alternating status and notes)
-('22.1', 'B', '170000', '', 'Near exit'),
-('22.2', 'B', '170000', '', 'Good view'),
-
--- Room type C
-('2.1', 'C', '200000', '', 'Near window'),
-('2.2', 'C', '200000', '', 'Good view'),
-('2.3', 'C', '200000', '', 'Near elevator'),
-('2.4', 'C', '200000', '', 'Quiet room'),
--- (Add more room numbers for type C up to 22.20, alternating status and notes)
-('21.19', 'C', '200000', '', 'Near exit'),
-('21.20', 'C', '200000', '', 'Good view');
+INSERT INTO `roominfo` VALUES('1.2', 'A', '150000', 1, 'Not Full'),
+                             ('1.3', 'B', '170000', 2, 'Not Full'),
+                             ('1.4', 'C', '200000', 3, 'Full'),
+                             ('2.1', 'A', '150000', 0, 'Not Full'),
+                             ('2.2', 'B', '170000', 1, 'Not Full'),
+                             ('2.3', 'C', '200000', 2, 'Not Full'),
+                             ('3.1', 'A', '150000', 3, 'Full'),
+                             ('3.2', 'B', '170000', 0, 'Not Full'),
+                             ('3.3', 'C', '200000', 1, 'Not Full'),
+                             ('4.1', 'A', '150000', 2, 'Not Full'),
+                             ('4.2', 'B', '170000', 3, 'Full'),
+                             ('4.3', 'C', '200000', 2, 'Not Full'),
+                             ('5.1', 'A', '150000', 3, 'Not Full'),
+                             ('5.2', 'B', '170000', 0, 'Not Full'),
+                             ('5.3', 'C', '200000', 0, 'Not Full'),
+                             ('5.11', 'A', '150000', 0, 'Not Full');
 /*!40000 ALTER TABLE `roominfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +180,7 @@ CREATE TABLE `roomrentalformdetail` (
   `CUSTOMERTYPEID` varchar(30) DEFAULT NULL,
   `CITIZENID` varchar(30) DEFAULT NULL,
   `ADDRESS` varchar(40) DEFAULT NULL,
-  PRIMARY KEY (`ROOMFORNO`,`NID`)
+  PRIMARY KEY (`ROOMFORMNO`,`NID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -215,9 +204,8 @@ CREATE TABLE `bill` (
 LOCK TABLES `bill` WRITE;
 /*!40000 ALTER TABLE `bill` DISABLE KEYS */;
 -- Insert data into bill table
-INSERT INTO `bill` (BILLNO, NID, ADDRESS, ROOMTOTALPRICE) VALUES
-('2024-05-01', 'John Doe', '123 Main St', '5000000'),
-('2024-05-02', 'Jane Smith', '456 Elm St', '7500000')
+INSERT INTO `bill`VALUES
+('2024-05-01', 'John Doe', '123 Main St', '5000000');
 /*!40000 ALTER TABLE `bill` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -242,8 +230,8 @@ CREATE TABLE `billdetail` (
 LOCK TABLES `billdetail` WRITE;
 /*!40000 ALTER TABLE `billdetail` DISABLE KEYS */;
 -- Insert data into billdetail table
-INSERT INTO `billdetail` (BILLNO, ROOMFORMNO, TOTALDAYS, PRICEDAY, TOTALPRICE) VALUES
-('2024-05-01','1','3','50000' ,'150000')
+INSERT INTO `billdetail`  VALUES
+('2024-05-01','1','3','50000' ,'150000');
 /*!40000 ALTER TABLE `billdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +253,7 @@ CREATE TABLE `parameters` (
 LOCK TABLES `parameters` WRITE;
 /*!40000 ALTER TABLE `parameters` DISABLE KEYS */;
 -- Insert data into parameters table
-INSERT INTO `parameters` (PARAMETERNAME, PARAMETERVALUE) VALUES
+INSERT INTO `parameters` VALUES
 ('AROOMCOUNT','0'),
 ('BROOMCOUNT','0'),
 ('CROOMCOUNT','0'),
@@ -273,7 +261,7 @@ INSERT INTO `parameters` (PARAMETERNAME, PARAMETERVALUE) VALUES
 ('FOREIGNCUSTOMERCOUNT','0'),
 ('MAXCUSTOMER','3'),
 ('FOREIGNSURCHARGERATE','1.5'),
-('3PEOPLESURCHARGERATE','0.25')
+('3PEOPLESURCHARGERATE','0.25');
 /*!40000 ALTER TABLE `parameters` ENABLE KEYS */;
 UNLOCK TABLES;
 

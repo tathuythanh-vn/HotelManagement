@@ -42,7 +42,7 @@ public class UserRoomDetails extends DBConnection implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         roomNoCol.setCellValueFactory(new PropertyValueFactory<CustomerRoomTable, String>("ROOMNO"));
-        roomTypeCol.setCellValueFactory(new PropertyValueFactory<CustomerRoomTable, String>("TYPE"));
+        roomTypeCol.setCellValueFactory(new PropertyValueFactory<CustomerRoomTable, String>("ROOMTYPE"));
         price_DayCol.setCellValueFactory(new PropertyValueFactory<CustomerRoomTable, String>("PRICEDAY"));
         roomStatusCol.setCellValueFactory(new PropertyValueFactory<CustomerRoomTable, String>("STATUS"));
         roomNote.setCellValueFactory(new PropertyValueFactory<CustomerRoomTable, String>("NOTE"));
@@ -54,17 +54,17 @@ public class UserRoomDetails extends DBConnection implements Initializable {
         Connection connection = getConnections();
         try {
             if(!connection.isClosed()){
-                String sql = "SELECT * FROM ROOMINFO ORDER BY STATUS";
+                String sql = "SELECT * FROM ROOMINFO ORDER BY ROOMNO";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()){
-                    String ROOMNO = resultSet.getString("ROOM_NO"); //SQL COL NAMES NID
-                    String TYPE = resultSet.getString("TYPE");
-                    String PRICEDAY = resultSet.getString("PRICE_DAY");
+                    String ROOMNO = resultSet.getString("ROOMNO"); //SQL COL NAMES NID
+                    String ROOMTYPE = resultSet.getString("ROOMTYPE");
+                    String PRICEDAY = resultSet.getString("PRICEDAY");
                     String STATUS = resultSet.getString("STATUS");
                     String NOTE = resultSet.getString("NOTE");
 
-                    CustomerRoomTable roomTablee = new CustomerRoomTable(ROOMNO, TYPE, NOTE, PRICEDAY, STATUS);
+                    CustomerRoomTable roomTablee = new CustomerRoomTable(ROOMNO, ROOMTYPE, PRICEDAY, STATUS, NOTE);
 
                     TABLEROW.add(roomTablee);
                 }
@@ -87,7 +87,7 @@ public class UserRoomDetails extends DBConnection implements Initializable {
                 String searchKeyword = newValue.toLowerCase();
                 if (search.getROOMNO().toLowerCase().indexOf(searchKeyword) != -1 ) {
                     return true; // Filter matches Room No.
-                } else if (search.getTYPE().toLowerCase().indexOf(searchKeyword) != -1 ) {
+                } else if (search.getROOMTYPE().toLowerCase().indexOf(searchKeyword) != -1 ) {
                     return true; // Filter matches Room Type.
                 } else if (search.getNOTE().toLowerCase().indexOf(searchKeyword) != -1 ) {
                     return true; // Filter matches Room Capacity Column

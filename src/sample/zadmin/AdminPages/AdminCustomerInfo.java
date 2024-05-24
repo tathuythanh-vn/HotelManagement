@@ -216,7 +216,7 @@ public class AdminCustomerInfo extends DBConnection implements Initializable{
                 // update information
                 CustomerInfoEdit customerInfoEdit = loader.getController();
                 customerInfoEdit.setCustomerInfo(adminCustomerTable);
-//                    System.out.println(managerRoomTable.getROOMNO() + " " + managerRoomTable.getTYPE() + " " + managerRoomTable.getCAPACITY() + " " + managerRoomTable.getPRICEDAY());
+//                    System.out.println(managerRoomTable.getROOMNO() + " " + managerRoomTable.getROOMTYPE() + " " + managerRoomTable.getCAPACITY() + " " + managerRoomTable.getPRICEDAY());
                 Stage window = new Stage();
                 window.setScene(scene);
                 window.initStyle(StageStyle.UNDECORATED);

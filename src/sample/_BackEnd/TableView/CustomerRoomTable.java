@@ -2,17 +2,17 @@ package sample._BackEnd.TableView;
 
 public class CustomerRoomTable {
     String ROOMNO;
-    String TYPE;
+    String ROOMTYPE;
     String NOTE;
     String PRICEDAY;
     String STATUS;
 
-    public CustomerRoomTable(String ROOMNO, String TYPE, String NOTE, String PRICEDAY, String STATUS){
+    public CustomerRoomTable(String ROOMNO, String ROOMTYPE, String PRICEDAY, String STATUS, String NOTE){
         this.ROOMNO = ROOMNO;
-        this.TYPE = TYPE;
-        this.NOTE = NOTE;
+        this.ROOMTYPE = ROOMTYPE;
         this.PRICEDAY = PRICEDAY;
         this.STATUS = STATUS;
+        this.NOTE = NOTE;
     }
 
     public String getROOMNO() {
@@ -23,12 +23,12 @@ public class CustomerRoomTable {
         this.ROOMNO = ROOMNO;
     }
 
-    public String getTYPE() {
-        return TYPE;
+    public String getROOMTYPE() {
+        return ROOMTYPE;
     }
 
-    public void setTYPE(String TYPE) {
-        this.TYPE = TYPE;
+    public void setROOMTYPE(String ROOMTYPE) {
+        this.ROOMTYPE = ROOMTYPE;
     }
 
     public String getNOTE() {

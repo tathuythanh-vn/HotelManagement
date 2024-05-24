@@ -281,7 +281,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
                     // update information
                     RoomInfoEdit roomInfoEdit = loader.getController();
                     roomInfoEdit.setRoomInfo(managerRoomTable.getROOMNO(), managerRoomTable.getTYPE(), managerRoomTable.getCAPACITY(), managerRoomTable.getPRICEDAY(), managerRoomTable.getSTATUS());
-//                    System.out.println(managerRoomTable.getROOMNO() + " " + managerRoomTable.getTYPE() + " " + managerRoomTable.getCAPACITY() + " " + managerRoomTable.getPRICEDAY());
+//                    System.out.println(managerRoomTable.getROOMNO() + " " + managerRoomTable.getROOMTYPE() + " " + managerRoomTable.getCAPACITY() + " " + managerRoomTable.getPRICEDAY());
                     Stage window = new Stage();
                     window.setScene(scene);
                     window.initStyle(StageStyle.UNDECORATED);
