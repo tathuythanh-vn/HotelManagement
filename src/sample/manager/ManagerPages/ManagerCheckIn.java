@@ -47,6 +47,8 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
     public DatePicker UserCheckIndate;
     public JFXComboBox roomChoiceBox;
 
+    public int maxPeople;
+
     private ObservableList<ManagerCustomerTable> TABLEROW = FXCollections.observableArrayList();
 
     // Kiểm tra kết nối
@@ -54,6 +56,7 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        findMaxPeople();
         updateChoiceBox();
         TABLEROW.clear();
         nameCol.setCellValueFactory(new PropertyValueFactory<ManagerCustomerTable, String>("Name")); //managerCustomerTable variable name
@@ -64,6 +67,25 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         showCustomerTable();
         roomChoiceBox.setOnAction(this::setRoomInfo);
 
+    }
+
+    private void findMaxPeople() {
+        Connection connection = DBConnection.getConnections();
+        try{
+            if(!connection.isClosed()) {
+                String sql = "SELECT * FROM PARAMETERS WHERE PARAMETERNAME = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, "MAXCUSTOMER");
+                ResultSet resultSet = statement.executeQuery();
+                while(resultSet.next()){
+                    maxPeople = resultSet.getInt("PARAMETERVALUE");
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnections();
+        }
     }
 
     public void setRoomInfo(Event event) {
@@ -189,18 +211,30 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
                 preparedStatement.setString(9, roomPriceDay);
 
                 preparedStatement.execute();
-
-                String sql1 = "UPDATE ROOMINFO SET STATUS = 'Full' WHERE ROOMNO = ?";
-                try (PreparedStatement preparedStatement1 = connection.prepareStatement(sql1)) {
+                if(!connection.isClosed()){
+                    String sql1 = "UPDATE ROOMINFO SET STATUS = STATUS + 1 WHERE ROOMNO = ?";
+                    PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
                     preparedStatement1.setString(1, RoomNo);
                     preparedStatement1.execute();
-                } catch (SQLException e) {
-                    CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Failed to update room status!");
                 }
 
-                CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Check-in Successful!");
-                updateChoiceBox();
-                clearTextFields();
+                if (!connection.isClosed()) {
+                    String sql2 = "SELECT STATUS FROM ROOMINFO WHERE ROOMNO = ?";
+                    PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+                    preparedStatement2.setString(1, RoomNo);
+                    ResultSet resultSet = preparedStatement2.executeQuery();
+
+                    if (resultSet.next()) {
+                        int currentStatus = resultSet.getInt("STATUS");
+
+                        if (currentStatus == maxPeople) {
+                            String sql3 = "UPDATE ROOMINFO SET NOTE = 'Full' WHERE ROOMNO = ?";
+                            PreparedStatement preparedStatement3 = connection.prepareStatement(sql3);
+                            preparedStatement3.setString(1, RoomNo);
+                            preparedStatement3.execute();
+                        }
+                    }
+                }
             } catch (SQLException e) {
                 CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "SQL Exception found!");
             }

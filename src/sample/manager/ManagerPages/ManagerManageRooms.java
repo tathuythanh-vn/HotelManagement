@@ -46,7 +46,6 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
     public TableColumn<ManagerRoomTable, String> roomCapacityCol;
     public TableColumn<ManagerRoomTable, String> price_DayCol;
     public TableColumn<ManagerRoomTable, String> roomNoteCol;
-    public JFXComboBox roomNoteChoiceBox;
     public JFXTextField roomTypeField;
     public JFXComboBox roomTypeComboBox;
 
@@ -96,7 +95,6 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
         String roomNo = roomNoField.getText();
         String roomType = roomTypeComboBox.getValue() + "";
         String price_day = price_dayArea.getText();
-        String roomNote = roomNoteChoiceBox.getValue() + "";
 
         if (roomNo.isEmpty() || roomType == null || price_day.isEmpty() || roomNote == null) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
@@ -115,13 +113,13 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
             return;
         }
 
-        String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICEDAY, NOTE, STATUS) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICEDAY, STATUS, NOTE) VALUES(?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, roomNo);
         preparedStatement.setString(2, roomType);
         preparedStatement.setString(3, price_day);
-        preparedStatement.setString(4, roomNote);
-        preparedStatement.setInt(5, 0); // Thiết lập giá trị STATUS = 0 khi tạo mới
+        preparedStatement.setString(4, String.valueOf(0));
+        preparedStatement.setString(5, "Not Full"); // Thiết lập giá trị STATUS = 0 khi tạo mới
 
         try {
             int rowsAffected = preparedStatement.executeUpdate();
@@ -144,7 +142,6 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        roomNoteChoiceBox.getItems().setAll(roomNote);
         roomTypeComboBox.getItems().addAll("A", "B", "C");
         roomTypeComboBox.setOnAction(event -> onComboBoxSelectionChanged());
         roomNoCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("ROOMNO"));
