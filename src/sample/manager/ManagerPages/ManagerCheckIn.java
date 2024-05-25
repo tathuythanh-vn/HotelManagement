@@ -62,6 +62,8 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         phoneCol.setCellValueFactory(new PropertyValueFactory<ManagerCustomerTable, String>("Phone"));
         addressCol.setCellValueFactory(new PropertyValueFactory<ManagerCustomerTable, String>("Address"));
         showCustomerTable();
+        roomChoiceBox.setOnAction(this::setRoomInfo);
+
     }
 
     public void setRoomInfo(Event event) {
