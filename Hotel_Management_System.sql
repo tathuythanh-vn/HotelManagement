@@ -258,19 +258,60 @@ INSERT INTO `parameters` VALUES
 ('BROOMCOUNT','0'),
 ('CROOMCOUNT','0'),
 
-('A','150.000')
-('A','170.000')
-('A','200.000')
+('A','150.000'),
+('B','170.000'),
+('C','200.000'),
 
 ('DOMESTICCUSTOMERCOUNT','0'),
 ('FOREIGNCUSTOMERCOUNT','0'),
+
 ('MAXCUSTOMER','3'),
+
 ('FOREIGNSURCHARGERATE','1.5'),
 ('3PEOPLESURCHARGERATE','0.25');
 /*!40000 ALTER TABLE `parameters` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
+--
+-- Table structure for table `checkinoutinfo`
+--
+
+DROP TABLE IF EXISTS `checkinoutinfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `checkinoutinfo` (
+                                  `SI_NO` int NOT NULL AUTO_INCREMENT,
+                                  `NAME` varchar(30) DEFAULT NULL,
+                                  `EMAIL` varchar(30) DEFAULT NULL,
+                                  `PHONE` varchar(30) DEFAULT NULL,
+                                  `ADDRESS` varchar(30) DEFAULT NULL,
+                                  `NID` varchar(15) DEFAULT NULL,
+                                  `ROOMNO` varchar(15) DEFAULT NULL,
+                                  `ROOMTYPE` varchar(15) DEFAULT NULL,
+                                  `ROOMSTATUS` varchar(15) DEFAULT NULL,
+                                  `CHECKEDIN` varchar(20) DEFAULT NULL,
+                                  `CHECKEDOUT` varchar(20) DEFAULT NULL,
+                                  `PRICEDAY` varchar(30) DEFAULT NULL,
+                                  `TOTALDAYS` varchar(30) DEFAULT NULL,
+                                  `TOTALPRICE` varchar(30) DEFAULT NULL,
+                                  PRIMARY KEY (`SI_NO`)
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `checkinoutinfo`
+--
+
+LOCK TABLES `checkinoutinfo` WRITE;
+/*!40000 ALTER TABLE `checkinoutinfo` DISABLE KEYS */;
+INSERT INTO `checkinoutinfo` VALUES (16,'3','3','3','3','3','12','12','12','2021-12-06','2021-12-06','12','1','12'),(17,'2','2','2','2','2','9','9','9','2021-12-06','2021-12-06','9','1','9'),(18,'4','4','4','4','4','11','Non-Ac','Double','2021-12-06','2021-12-16','500','11','5500'),(19,'8','8','8','8','8','11','Non-Ac','Double','2021-12-06','2021-12-07','500','2','1000'),(20,'3','3','3','3','3','11','Non-Ac','Double','2021-12-06','2021-12-06','500','1','500'),(21,'2','3','2','2','2','13','Ac','12','2020-12-01','2020-12-31','12','31','372'),(22,'2','3','2','2','2','13','Ac','12','2020-09-01','2020-11-30','12','91','1092'),(23,'2','3','2','2','2','13','Ac','12','2013-07-01','2021-11-30','12','155','1860'),(24,'23','3','2','2','2','13','Ac','12','2021-12-06','2021-12-19','12','22','4884'),(25,'Md. Mursalin','mursa@gamil.com','015555','Dhaka, Bangladesh','mursalin','1','AC','Single','2021-12-01','2021-12-10','1500','10','15000'),(26,'Md. Mursalin','mursa@gamil.com','015555','Dhaka, Bangladesh','mursalin','11','Non-Ac','Double','2021-12-02','2021-12-19','500','22','4884'),(27,'mursalin','mursalin@gmail.com','mursalin','mursalin','mursalin','111','AC','Double','2021-11-30','2021-12-18','1000','19','19000'),(28,'mursalin','mursalin@gmail.com','mursalin','mursalin','mursalin','2','AC-Room','Double','2021-11-28','2021-12-08','2000','11','22000'),(29,'1','1','1','1','1','1','AC','Single','2021-11-29','2021-12-17','1500','19','28500'),(30,'mursalin','mursalin@gmail.com','01222222','Dhaka, Bangladesh','mursalin','1','AC','Single','2021-12-17','2021-12-19','1500','22','4884'),(31,'1','1','1','1','1','111','AC','Double','2021-11-28','2021-12-19','1000','22','4884'),(32,'4','4','4','4','4','12','12','12','2021-12-18','2021-12-19','12','22','4884'),(33,'mursalin','mursalin@gmail.com','01222222','Dhaka, Bangladesh','mursalin','123','1222','222','2021-11-30','2021-12-25','222','26','5772'),(34,'1','1','1111','1','1','123','1222','222','2021-11-28','2021-12-19','222','22','4884'),(35,'mursalin','mursalin@gmail.com','01222222','Dhaka, Bangladesh','mursalin','1','AC','Single','2021-11-29',NULL,'1500',NULL,NULL),(36,'mursalin','mursalin@gmail.com','01222222','Dhaka, Bangladesh','mursalin','11','Non-Ac','Double','2021-11-29',NULL,'500',NULL,NULL),(37,'mursalin','mursalin@gmail.com','01222222','Dhaka, Bangladesh','mursalin','12','12','12','2021-11-29',NULL,'12',NULL,NULL),(38,'mursalin','mursalin@gmail.com','01222222','Dhaka, Bangladesh','mursalin','111','AC','Double','2021-12-19',NULL,'1000',NULL,NULL),(39,'1','1','1111','1','1','123','1222','222','2021-12-19',NULL,'222',NULL,NULL);
+/*!40000 ALTER TABLE `checkinoutinfo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `customerinfo`
+--
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
