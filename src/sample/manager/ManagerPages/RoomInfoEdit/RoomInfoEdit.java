@@ -3,13 +3,10 @@ package sample.manager.ManagerPages.RoomInfoEdit;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import sample._BackEnd.CommonTask;
 import sample._BackEnd.DBConnection;
-import sample._BackEnd.TableView.ManagerRoomTable;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -20,31 +17,50 @@ import java.util.ResourceBundle;
 
 import static sample._BackEnd.DBConnection.closeConnections;
 import static sample._BackEnd.DBConnection.getConnections;
-import static sample.customer.Login.UserLogin.currentCustomerNID;
 
 public class RoomInfoEdit implements Initializable {
     public Button UserConfirm;
 
     public TextField roomNoField;
-    public TextField roomTypeField;
+    public JFXComboBox roomTypeComboBox;
     public TextField priceDayField;
-    public JFXComboBox statusCbox;
-    private String[] roomStats = {"Available", "Unavailable"};
+    public JFXComboBox noteCbox;
+    private String[] roomStats = {"Full", "Not Full"};
 
     public void closeBtn(ActionEvent event) {
         Stage stage = (Stage) UserConfirm.getScene().getWindow();
         stage.close();
     }
 
+    private Connection connection = DBConnection.getConnections();
+
+    private void onComboBoxSelectionChanged() {
+        String selectedParameter = (String) roomTypeComboBox.getValue();
+        if (selectedParameter != null) {
+            // Truy vấn cơ sở dữ liệu để lấy giá trị tương ứng từ bảng parameters
+            String query = "SELECT PARAMETERVALUE FROM parameters WHERE PARAMETERNAME = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, selectedParameter);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String parameterValue = resultSet.getString("PARAMETERVALUE");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void saveBtn(ActionEvent event) {
         Connection connection = getConnections();
         try {
             if (!connection.isClosed()){
-                String sql = "UPDATE RoomInfo SET TYPE = ?, PRICE_DAY = ?, STATUS = ? where ROOM_NO = ?";
+                String sql = "UPDATE RoomInfo SET ROOMTYPE = ?, PRICEDAY = ?, NOTE = ? where ROOMNO = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, roomTypeField.getText());
+                statement.setString(1, roomTypeComboBox.getValue()+"");
                 statement.setString(2, priceDayField.getText());
-                statement.setString(3, statusCbox.getValue()+"");
+                statement.setString(3, noteCbox.getValue()+"");
                 statement.setString(4, roomNoField.getText());
                 statement.executeUpdate();
             }
@@ -59,14 +75,14 @@ public class RoomInfoEdit implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        statusCbox.getItems().setAll(roomStats);
+        noteCbox.getItems().setAll(roomStats);
     }
 
-    public void setRoomInfo(String roomNo, String type, String priceDay, String status) {
+    public void setRoomInfo(String roomNo, String type, String priceDay, String note) {
         roomNoField.setText(roomNo);
         roomNoField.setDisable(true);
-        roomTypeField.setText(type);
+        roomTypeComboBox.setValue(type);
         priceDayField.setText(priceDay);
-        statusCbox.setValue(status);
+        noteCbox.setValue(note);
     }
 }

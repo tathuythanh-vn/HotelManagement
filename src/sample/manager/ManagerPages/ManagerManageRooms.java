@@ -84,33 +84,60 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
         }
     }
 
+
+
     public void addRoom(ActionEvent actionEvent) throws SQLException {
         Connection connection = getConnections();
+        if (connection == null || connection.isClosed()) {
+            CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Cannot establish connection to the database!");
+            return;
+        }
+
         String roomNo = roomNoField.getText();
         String roomType = roomTypeComboBox.getValue()+"";
-        String price_day = price_dayArea.getText(); // Lấy giá trị của price_dayArea bằng getText()
-        String roomNote= roomTypeComboBox.getValue()+"";
+        String price_day = price_dayArea.getText();
+        String roomNote = roomNoteChoiceBox.getValue()+"";
 
-        if (roomNo.isEmpty() || roomType.isEmpty() || price_day.isEmpty() || roomNote.equals("null" )) {
+        if (roomNo.isEmpty() || roomType == null || price_day.isEmpty() || roomNote == null) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
-        } else {
-            String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICE_DAY, STATUS) VALUES(?,?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, roomNo);
-            preparedStatement.setString(2, roomType);
-            preparedStatement.setString(3, price_day);
-            preparedStatement.setString(4, roomNote);
-            try{
-                preparedStatement.execute();
+            return;
+        }
+
+        // Kiểm tra xem số phòng đã tồn tại chưa
+        String checkSql = "SELECT COUNT(*) FROM ROOMINFO WHERE ROOMNO = ?";
+        PreparedStatement checkStatement = connection.prepareStatement(checkSql);
+        checkStatement.setString(1, roomNo);
+        ResultSet resultSet = checkStatement.executeQuery();
+        resultSet.next();
+        int count = resultSet.getInt(1);
+        if (count > 0) {
+            CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "This Room No. already exists!");
+            return;
+        }
+
+        String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICEDAY, NOTE) VALUES(?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, roomNo);
+        preparedStatement.setString(2, roomType);
+        preparedStatement.setString(3, price_day);
+        preparedStatement.setString(4, roomNote);
+
+        try {
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
                 CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Room Added Successfully!");
                 showRoomTable();
-            } catch (SQLException e){
-                CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "This Room No. already exists!");
-            } finally {
-                closeConnections();
+            } else {
+                CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Room could not be added.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "This Room No. already exists!");
+        } finally {
+            closeConnections();
         }
     }
+
 
 
     @Override

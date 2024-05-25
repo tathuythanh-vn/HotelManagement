@@ -41,6 +41,7 @@
                         </DropShadow>
                     </effect>
                 </Label>
+<!--
                 <Label layoutX="29.0" layoutY="120.0" prefHeight="25.0" prefWidth="70.0" text="Capacity">
                     <effect>
                         <DropShadow>
@@ -50,6 +51,7 @@
                         </DropShadow>
                     </effect>
                 </Label>
+-->
                 <Label layoutX="29.0" layoutY="164.0" prefHeight="25.0" prefWidth="70.0" text="Price/Day">
                     <effect>
                         <DropShadow>
@@ -59,7 +61,7 @@
                         </DropShadow>
                     </effect>
                 </Label>
-                <Label layoutX="281.0" layoutY="108.0" prefHeight="25.0" prefWidth="70.0" text="Status">
+                <Label layoutX="281.0" layoutY="108.0" prefHeight="25.0" prefWidth="70.0" text="Note">
                     <effect>
                         <DropShadow>
                             <color>
@@ -77,7 +79,7 @@
                         </DropShadow>
                     </effect>
                 </TextField>
-                <TextField fx:id="roomTypeField" layoutX="99.0" layoutY="75.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
+                <JFXComboBox fx:id="roomTypeComboBox" layoutX="99.0" layoutY="75.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
                     <effect>
                         <DropShadow>
                             <color>
@@ -85,7 +87,8 @@
                             </color>
                         </DropShadow>
                     </effect>
-                </TextField>
+                </JFXComboBox>
+<!--
                 <TextField fx:id="capacityField" layoutX="99.0" layoutY="120.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
                     <effect>
                         <DropShadow>
@@ -95,6 +98,7 @@
                         </DropShadow>
                     </effect>
                 </TextField>
+-->
                 <TextField fx:id="priceDayField" layoutX="99.0" layoutY="164.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
                     <effect>
                         <DropShadow>
@@ -113,7 +117,7 @@
                         </DropShadow>
                     </effect>
                 </Button>
-            <JFXComboBox fx:id="statusCbox" layoutX="354.0" layoutY="108.0" prefHeight="25.0" prefWidth="120.0" />
+            <JFXComboBox fx:id="noteCbox" layoutX="354.0" layoutY="108.0" prefHeight="25.0" prefWidth="120.0" />
             </children>
         </AnchorPane>
         <AnchorPane styleClass="titlePane" stylesheets="@CSS/ManagerMainTitlebarPane.css">

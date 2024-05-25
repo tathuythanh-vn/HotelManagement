@@ -258,9 +258,9 @@ INSERT INTO `parameters` VALUES
 ('BROOMCOUNT','0'),
 ('CROOMCOUNT','0'),
 
-('A','150.000')
-('A','170.000')
-('A','200.000')
+('A','150.000'),
+('B','170.000'),
+('C','200.000'),
 
 ('DOMESTICCUSTOMERCOUNT','0'),
 ('FOREIGNCUSTOMERCOUNT','0'),
