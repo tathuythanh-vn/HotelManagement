@@ -295,6 +295,7 @@ CREATE TABLE `checkinoutinfo` (
                                   `PRICEDAY` varchar(30) DEFAULT NULL,
                                   `TOTALDAYS` varchar(30) DEFAULT NULL,
                                   `TOTALPRICE` varchar(30) DEFAULT NULL,
+                                  `PEOPLENO` varchar (30) DEFAULT NULL,
                                   PRIMARY KEY (`SI_NO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

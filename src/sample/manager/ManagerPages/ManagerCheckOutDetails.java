@@ -58,19 +58,18 @@ public class ManagerCheckOutDetails implements Initializable {
         Connection connection = getConnections();
         try {
             if(!connection.isClosed()){
-                String sql = "SELECT * FROM CHECKINOUTINFO ORDER BY SI_NO DESC";
+                String sql = "SELECT * FROM checkinoutinfo ORDER BY SI_NO DESC";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()){
                     String ROOMNO = resultSet.getString("ROOMNO"); //SQL COL NAMES NID
                     String TYPE = resultSet.getString("ROOMTYPE");
-                    String CAPACITY = resultSet.getString("CAPACITY");
                     String PRICEDAY = resultSet.getString("PRICEDAY");
                     String TOTALPRICE = resultSet.getString("TOTALPRICE");
                     String CHECKEDIN = resultSet.getString("CHECKEDIN");
                     String CHECKEDOUT = resultSet.getString("CHECKEDOUT");
                     String NID = resultSet.getString("NID");
-                    ManagerCheckOutTable roomTablee = new ManagerCheckOutTable(NID, ROOMNO, TYPE, CAPACITY, PRICEDAY, TOTALPRICE, CHECKEDIN, CHECKEDOUT);
+                    ManagerCheckOutTable roomTablee = new ManagerCheckOutTable(NID, ROOMNO, TYPE, PRICEDAY, TOTALPRICE, CHECKEDIN, CHECKEDOUT);
 
                     TABLEROW.add(roomTablee);
                 }

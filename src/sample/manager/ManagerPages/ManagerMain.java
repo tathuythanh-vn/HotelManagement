@@ -53,4 +53,6 @@ public class ManagerMain implements Initializable {
     public void closeApplication(MouseEvent mouseEvent) {
         System.exit(0);
     }
+
+
 }

@@ -2,17 +2,16 @@ package sample._BackEnd.TableView;
 
 public class ManagerCheckOutTable {
 
-    String roomno,  type,  capacity,  priceday,  totalprice,  checkedin,  checkedout, nid;
+    String roomno,  type, priceday,  totalprice,  checkedin,  checkedout, nid;
 
-    public ManagerCheckOutTable(String nid, String roomno, String type, String capacity, String priceday, String totalprice, String checkedin, String checkedout) {
-    this.roomno = roomno;
-    this.type = type;
-    this.capacity = capacity;
-    this.priceday = priceday;
-    this.totalprice = totalprice;
-    this.checkedin = checkedin;
-    this.checkedout = checkedout;
-    this.nid = nid;
+    public ManagerCheckOutTable(String nid, String roomno, String type, String priceday, String totalprice, String checkedin, String checkedout) {
+        this.roomno = roomno;
+        this.type = type;
+        this.priceday = priceday;
+        this.totalprice = totalprice;
+        this.checkedin = checkedin;
+        this.checkedout = checkedout;
+        this.nid = nid;
     }
 
     public String getNid() {
@@ -37,14 +36,6 @@ public class ManagerCheckOutTable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(String capacity) {
-        this.capacity = capacity;
     }
 
     public String getPriceday() {

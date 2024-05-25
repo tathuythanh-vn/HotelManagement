@@ -49,7 +49,7 @@ public class UserCheckIn implements Initializable {
     @FXML
     public Label roomNoteField;
 
-    public int maxPeople;
+    public int maxPeople = 0;
 
 
 

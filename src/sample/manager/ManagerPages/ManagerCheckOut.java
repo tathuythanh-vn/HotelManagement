@@ -43,11 +43,18 @@ public class ManagerCheckOut extends DBConnection implements Initializable {
     public Label roomNoField;
     public Label siNoField;
 
+    public String peopleSurcharge = "";
+    public long typeSurcharge = 0;
+    public String NID = "";
+    public String RoomNo = "";
+    public String customerTypeID = "";
+    public int maxPeople = 0;
 
     private ObservableList<ManagerCheckInDetailsTable> TABLEROW = FXCollections.observableArrayList();
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        findMaxPeople();
         TABLEROW.clear();
         nameCol.setCellValueFactory(new PropertyValueFactory<ManagerCheckInDetailsTable, String>("name")); //managerCustomerTable variable name
         siCol.setCellValueFactory(new PropertyValueFactory<ManagerCheckInDetailsTable, String>("sino"));
@@ -57,7 +64,55 @@ public class ManagerCheckOut extends DBConnection implements Initializable {
         checkedInCol.setCellValueFactory(new PropertyValueFactory<ManagerCheckInDetailsTable, String>("checkedin"));
 
         showCheckedInTable();
+    }
 
+    private void findMaxPeople() {
+        Connection connection = DBConnection.getConnections();
+        try{
+            if(!connection.isClosed()) {
+                String sql = "SELECT * FROM PARAMETERS WHERE PARAMETERNAME = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, "MAXCUSTOMER");
+                ResultSet resultSet = statement.executeQuery();
+                while(resultSet.next()){
+                    maxPeople = resultSet.getInt("PARAMETERVALUE");
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            DBConnection.closeConnections();
+        }
+    }
+
+    private void findSurchargeRate() {
+        Connection connection = getConnections();
+        try {
+            if (!connection.isClosed()) {
+                PreparedStatement statement1 = connection.prepareStatement("SELECT CUSTOMERTYPEID FROM CUSTOMERINFO WHERE NID = ?");
+                statement1.setString(1, NID);
+                ResultSet resultSet1 = statement1.executeQuery();
+
+                if (resultSet1.next()) {
+                    customerTypeID = resultSet1.getString("CUSTOMERTYPEID");
+                }
+
+                if (!customerTypeID.isEmpty()) {
+                    PreparedStatement statement2 = connection.prepareStatement("SELECT CUSTOMERSURCHARGERATE FROM CUSTOMERTYPE WHERE CUSTOMERTYPEID = ?");
+                    statement2.setString(1, customerTypeID);
+                    ResultSet resultSet2 = statement2.executeQuery();
+
+                    if (resultSet2.next()) {
+                        String typeSurcharge = resultSet2.getString("CUSTOMERSURCHARGERATE");
+                        typeSurcharge = resultSet2.getString("CUSTOMERSURCHARGERATE");
+                    }
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            closeConnections();
+        }
     }
 
     @FXML
@@ -74,6 +129,38 @@ public class ManagerCheckOut extends DBConnection implements Initializable {
             if(isNumeric) {
                 long pricePerDay = Long.parseLong(priceDay);
                 long totalPrice = pricePerDay * days;
+
+                Connection connection = getConnections();
+                try {
+                    if (!connection.isClosed()) {
+                        PreparedStatement statement1 = connection.prepareStatement("SELECT CUSTOMERTYPEID FROM CUSTOMERINFO WHERE NID = ?");
+                        statement1.setString(1, NID);
+                        ResultSet resultSet1 = statement1.executeQuery();
+
+                        if (resultSet1.next()) {
+                            customerTypeID = resultSet1.getString("CUSTOMERTYPEID");
+                        }
+
+                        if (!customerTypeID.isEmpty()) {
+                            PreparedStatement statement2 = connection.prepareStatement("SELECT CUSTOMERSURCHARGERATE FROM CUSTOMERTYPE WHERE CUSTOMERTYPEID = ?");
+                            statement2.setString(1, customerTypeID);
+                            ResultSet resultSet2 = statement2.executeQuery();
+
+                            if (resultSet2.next()) {
+                                long typeSurcharge = resultSet2.getLong("CUSTOMERSURCHARGERATE");
+                                if (typeSurcharge != 0) {
+                                    System.out.println(typeSurcharge);
+                                    totalPrice = totalPrice * typeSurcharge;
+                                }
+                            }
+                        }
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } finally {
+                    closeConnections();
+                }
+
                 totalPriceField.setText(totalPrice+"");
             }
 
@@ -104,12 +191,13 @@ public class ManagerCheckOut extends DBConnection implements Initializable {
                 while (resultSet.next()){
                     String SI_NO = resultSet.getString("SI_NO"); //SQL COL NAMES NID
                     String NAME = resultSet.getString("NAME");
-                    String ROOMNO = resultSet.getString("ROOMNO");
+                    NID = resultSet.getString("NID");
+                    RoomNo = resultSet.getString("ROOMNO");
                     String PRICEDAY = resultSet.getString("PRICEDAY");
                     String CHECKEDIN = resultSet.getString("CHECKEDIN");
                     String ADDRESS = resultSet.getString("ADDRESS");
 
-                    ManagerCheckInDetailsTable checkInTable = new ManagerCheckInDetailsTable(SI_NO, NAME, ROOMNO, PRICEDAY, CHECKEDIN, ADDRESS);
+                    ManagerCheckInDetailsTable checkInTable = new ManagerCheckInDetailsTable(SI_NO, NAME, RoomNo, PRICEDAY, CHECKEDIN, ADDRESS);
 
                     TABLEROW.add(checkInTable);
                 }
@@ -160,12 +248,29 @@ public class ManagerCheckOut extends DBConnection implements Initializable {
                 if (rowsUpdated > 0) {
                     CommonTask.showAlert(Alert.AlertType.INFORMATION, "Success", "Check-out successful!");
 
-                    String sql1 = "UPDATE ROOMINFO SET STATUS = 'Available' WHERE ROOM_NO = ?";
-                    try (PreparedStatement preparedStatement1 = connection.prepareStatement(sql1)) {
-                        preparedStatement1.setString(1, roomNo);
-                        preparedStatement1.executeUpdate();
-                    } catch (SQLException e) {
-                        CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Failed to update room status!");
+                    if(!connection.isClosed()){
+                        String sql1 = "UPDATE ROOMINFO SET STATUS = STATUS - 1 WHERE ROOMNO = ?";
+                        PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
+                        preparedStatement1.setString(1, RoomNo);
+                        preparedStatement1.execute();
+                    }
+
+                    if (!connection.isClosed()) {
+                        String sql2 = "SELECT STATUS FROM ROOMINFO WHERE ROOMNO = ?";
+                        PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+                        preparedStatement2.setString(1, RoomNo);
+                        ResultSet resultSet = preparedStatement2.executeQuery();
+
+                        if (resultSet.next()) {
+                            int currentStatus = resultSet.getInt("STATUS");
+
+                            if (currentStatus != maxPeople) {
+                                String sql3 = "UPDATE ROOMINFO SET NOTE = 'Not Full' WHERE ROOMNO = ?";
+                                PreparedStatement preparedStatement3 = connection.prepareStatement(sql3);
+                                preparedStatement3.setString(1, RoomNo);
+                                preparedStatement3.execute();
+                            }
+                        }
                     }
 
                     showCheckedInTable();
