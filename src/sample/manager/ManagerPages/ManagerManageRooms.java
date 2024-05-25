@@ -7,6 +7,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -44,63 +45,83 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
     public TableColumn<ManagerRoomTable, String> roomTypeCol;
     public TableColumn<ManagerRoomTable, String> roomCapacityCol;
     public TableColumn<ManagerRoomTable, String> price_DayCol;
-    public TableColumn<ManagerRoomTable, String> roomStatusCol;
-    public JFXComboBox roomStatusChoiceBox;
+    public TableColumn<ManagerRoomTable, String> roomNoteCol;
+    public JFXComboBox roomNoteChoiceBox;
     public JFXTextField roomTypeField;
-    public JFXTextField bedCapacityField;
-/*
+    public JFXComboBox roomTypeComboBox;
+
+    /*
     public JFXTextField price_dayField;
 */
     public JFXTextField roomNoField;
     public TableColumn actionCol;
 
-    private String[] roomStats = {"Available", "Unavailable"};
+    private String[] roomNote = {"Full", "Not Full"};
 
     private ObservableList<ManagerRoomTable> TABLEROW = FXCollections.observableArrayList();
+
+    @FXML
+    private TextField price_dayArea;
+
+    private Connection connection = DBConnection.getConnections();
+
+    private void onComboBoxSelectionChanged() {
+        String selectedParameter = (String) roomTypeComboBox.getValue();
+        if (selectedParameter != null) {
+            // Truy vấn cơ sở dữ liệu để lấy giá trị tương ứng từ bảng parameters
+            String query = "SELECT PARAMETERVALUE FROM parameters WHERE PARAMETERNAME = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, selectedParameter);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String parameterValue = resultSet.getString("PARAMETERVALUE");
+                        price_dayArea.setText(parameterValue);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void addRoom(ActionEvent actionEvent) throws SQLException {
         Connection connection = getConnections();
         String roomNo = roomNoField.getText();
-        String bedCapacity = bedCapacityField.getText();
-        String roomType = roomTypeField.getText();
-/*
-        String price_day = price_dayField.getText();
-*/
-        String roomStatus = roomStatusChoiceBox.getValue()+"";
+        String roomType = roomTypeComboBox.getValue()+"";
+        String price_day = price_dayArea.getText(); // Lấy giá trị của price_dayArea bằng getText()
+        String roomNote= roomTypeComboBox.getValue()+"";
 
-        if (roomNo.isEmpty() || bedCapacity.isEmpty()  || roomType.isEmpty()  || roomStatus.equals("null")) {
+        if (roomNo.isEmpty() || roomType.isEmpty() || price_day.isEmpty() || roomNote.equals("null" )) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
         } else {
-            String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, NOTE, STATUS) VALUES(?,?,?,?)";
+            String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICE_DAY, STATUS) VALUES(?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, roomNo);
             preparedStatement.setString(2, roomType);
-            preparedStatement.setString(3, bedCapacity);
-/*
-            preparedStatement.setString(4, price_day);
-*/
-            preparedStatement.setString(4, roomStatus);
+            preparedStatement.setString(3, price_day);
+            preparedStatement.setString(4, roomNote);
             try{
                 preparedStatement.execute();
                 CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Room Added Successfully!");
                 showRoomTable();
             } catch (SQLException e){
-                CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "This Room no. already exists!");
+                CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "This Room No. already exists!");
             } finally {
                 closeConnections();
             }
         }
-
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        roomStatusChoiceBox.getItems().setAll(roomStats);
+        roomNoteChoiceBox.getItems().setAll(roomNote);
+        roomTypeComboBox.getItems().addAll("A", "B", "C");
+        roomTypeComboBox.setOnAction(event -> onComboBoxSelectionChanged());
         roomNoCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("ROOMNO"));
         roomTypeCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("ROOMTYPE"));
-        roomCapacityCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("CAPACITY"));
         price_DayCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("PRICEDAY"));
-        roomStatusCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("STATUS"));
+        roomNoteCol.setCellValueFactory(new PropertyValueFactory<ManagerRoomTable, String>("NOTE"));
         showRoomTable();
         actionButtons();
     }
@@ -116,11 +137,10 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
                 while (resultSet.next()){
                     String ROOMNO = resultSet.getString("ROOMNO"); //SQL COL NAMES NID
                     String ROOMTYPE = resultSet.getString("ROOMTYPE");
-                    String CAPACITY = resultSet.getString("CAPACITY");
-                    String PRICEDAY = resultSet.getString("PRICE_DAY");
-                    String STATUS = resultSet.getString("STATUS");
+                    String PRICE_DAY = resultSet.getString("PRICEDAY");
+                    String NOTE = resultSet.getString("NOTE");
 
-                    ManagerRoomTable roomTablee = new ManagerRoomTable(ROOMNO, ROOMTYPE, CAPACITY, PRICEDAY, STATUS);
+                    ManagerRoomTable roomTablee = new ManagerRoomTable(ROOMNO, ROOMTYPE, PRICE_DAY, NOTE);
 
                     TABLEROW.add(roomTablee);
                 }
@@ -132,6 +152,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
             closeConnections();
         }
     }
+
 
     private void actionButtons() {
         Callback<TableColumn<ManagerRoomTable, String>, TableCell<ManagerRoomTable, String>> cellCallback =
@@ -250,8 +271,8 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
     }
 
     public void tableRowDelete(ManagerRoomTable managerRoomTable) {
-        String roomStatus = managerRoomTable.getSTATUS();
-        if (!roomStatus.equals("Booked")) {
+        String roomStatus = managerRoomTable.getNOTE();
+        if (!roomStatus.equals("Full")) {
             Connection connection = getConnections();
             try {
                 if (!connection.isClosed()) {
@@ -276,7 +297,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
     }
 
     public void editTableRowInfo(ManagerRoomTable managerRoomTable) throws IOException {
-        if (!(managerRoomTable.getSTATUS()).equals("Booked")) {
+        if (!(managerRoomTable.getNOTE()).equals("Full")) {
             Connection connection = getConnections();
             try {
                 if (!connection.isClosed()) {
@@ -286,7 +307,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
                     Scene scene = new Scene(viewContact);
                     // update information
                     RoomInfoEdit roomInfoEdit = loader.getController();
-                    roomInfoEdit.setRoomInfo(managerRoomTable.getROOMNO(), managerRoomTable.getTYPE(), managerRoomTable.getCAPACITY(), managerRoomTable.getPRICEDAY(), managerRoomTable.getSTATUS());
+                    roomInfoEdit.setRoomInfo(managerRoomTable.getROOMNO(), managerRoomTable.getROOMTYPE(), managerRoomTable.getPRICEDAY(), managerRoomTable.getNOTE());
 //                    System.out.println(managerRoomTable.getROOMNO() + " " + managerRoomTable.getROOMTYPE() + " " + managerRoomTable.getCAPACITY() + " " + managerRoomTable.getPRICEDAY());
                     Stage window = new Stage();
                     window.setScene(scene);

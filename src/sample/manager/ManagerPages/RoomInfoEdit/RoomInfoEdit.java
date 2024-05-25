@@ -27,7 +27,6 @@ public class RoomInfoEdit implements Initializable {
 
     public TextField roomNoField;
     public TextField roomTypeField;
-    public TextField capacityField;
     public TextField priceDayField;
     public JFXComboBox statusCbox;
     private String[] roomStats = {"Available", "Unavailable"};
@@ -41,13 +40,12 @@ public class RoomInfoEdit implements Initializable {
         Connection connection = getConnections();
         try {
             if (!connection.isClosed()){
-                String sql = "UPDATE RoomInfo SET TYPE = ?, CAPACITY = ?, PRICE_DAY = ?, STATUS = ? where ROOM_NO = ?";
+                String sql = "UPDATE RoomInfo SET TYPE = ?, PRICE_DAY = ?, STATUS = ? where ROOM_NO = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, roomTypeField.getText());
-                statement.setString(2, capacityField.getText());
-                statement.setString(3, priceDayField.getText());
-                statement.setString(4, statusCbox.getValue()+"");
-                statement.setString(5, roomNoField.getText());
+                statement.setString(2, priceDayField.getText());
+                statement.setString(3, statusCbox.getValue()+"");
+                statement.setString(4, roomNoField.getText());
                 statement.executeUpdate();
             }
         } catch (SQLException throwables) {
@@ -64,11 +62,10 @@ public class RoomInfoEdit implements Initializable {
         statusCbox.getItems().setAll(roomStats);
     }
 
-    public void setRoomInfo(String roomNo, String type, String capacity, String priceDay, String status) {
+    public void setRoomInfo(String roomNo, String type, String priceDay, String status) {
         roomNoField.setText(roomNo);
         roomNoField.setDisable(true);
         roomTypeField.setText(type);
-        capacityField.setText(capacity);
         priceDayField.setText(priceDay);
         statusCbox.setValue(status);
     }
