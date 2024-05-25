@@ -54,20 +54,22 @@ public class AdminEarningLog implements Initializable {
     public void showEarningLog(){
         TABLEROW.clear();
         Connection connection = getConnections();
+
         try {
             if(!connection.isClosed()){
                 String sql = "SELECT * FROM CHECKINOUTINFO WHERE CHECKEDOUT IS NOT NULL ORDER BY SI_NO DESC";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
+
                 while (resultSet.next()){
-                    String ROOMNO = resultSet.getString("ROOMNO"); //SQL COL NAMES NID
+                    String NID = resultSet.getString("NID");
+                    String ROOMNO = resultSet.getString("ROOMNO");
                     String TYPE = resultSet.getString("ROOMTYPE");
-                    String CAPACITY = resultSet.getString("CAPACITY");
                     String PRICEDAY = resultSet.getString("PRICEDAY");
                     String TOTALPRICE = resultSet.getString("TOTALPRICE");
                     String CHECKEDIN = resultSet.getString("CHECKEDIN");
                     String CHECKEDOUT = resultSet.getString("CHECKEDOUT");
-                    String NID = resultSet.getString("NID");
+
                     AdminEarningTable roomTablee = new AdminEarningTable(NID, ROOMNO, TYPE, CHECKEDIN, CHECKEDOUT, PRICEDAY, TOTALPRICE);
 
                     TABLEROW.add(roomTablee);

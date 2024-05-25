@@ -41,13 +41,6 @@ public class AdminTotalEarnings extends DBConnection implements Initializable {
         list.add(new PieChart.Data("Earned This Month", currMonthSum));
         list.add(new PieChart.Data("Earned Current Year", currYearSum));
         piechart.setData(list);
-//        piechart.setTitle("Earning Comparison");
-
-//        piechart.getData().forEach(data -> {
-//            String percentage = (data.getPieValue()+"");
-//            Tooltip tooltip = new Tooltip(percentage);
-//            Tooltip.install(data.getNode(), tooltip);
-//        });
     }
 
     private void setEarnInfo() {
