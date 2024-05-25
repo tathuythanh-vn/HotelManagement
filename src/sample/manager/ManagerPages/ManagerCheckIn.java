@@ -1,9 +1,11 @@
 package sample.manager.ManagerPages;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -40,11 +42,15 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
     public Label addressField;
     public int selectIndex = -1;
     public Label roomTypeField;
-    public Label roomCapacityField;
     public Label roomPriceField;
+    public Label roomNoteField;
     public DatePicker UserCheckIndate;
     public JFXComboBox roomChoiceBox;
+
     private ObservableList<ManagerCustomerTable> TABLEROW = FXCollections.observableArrayList();
+
+    // Kiểm tra kết nối
+    Connection connection = DBConnection.getConnections();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -56,36 +62,33 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         phoneCol.setCellValueFactory(new PropertyValueFactory<ManagerCustomerTable, String>("Phone"));
         addressCol.setCellValueFactory(new PropertyValueFactory<ManagerCustomerTable, String>("Address"));
         showCustomerTable();
-        roomChoiceBox.setOnAction(this::setRoomInfoo);
     }
 
-    private void setRoomInfoo(javafx.event.Event event) {
+    public void setRoomInfo(Event event) {
         String roomNo = roomChoiceBox.getValue()+"";
-        if(!roomNo.equals("null")) {
-            Connection connection = DBConnection.getConnections();
-            try {
-                if (!connection.isClosed()) {
-                    String sql = "SELECT * FROM ROOMINFO WHERE ROOM_NO = ?";
-                    PreparedStatement statement = connection.prepareStatement(sql);
-                    statement.setString(1, roomNo);
-                    ResultSet resultSet = statement.executeQuery();
-                    if (resultSet.next()) {
-                        String roomCapacity = resultSet.getString("CAPACITY");
-                        String roomType = resultSet.getString("TYPE");
-                        String roomPriceDay = resultSet.getString("PRICE_DAY");
+        Connection connection = DBConnection.getConnections();
+        try {
+            if(!connection.isClosed()){
+                String sql = "SELECT * FROM ROOMINFO WHERE ROOMNO = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, roomNo);
+                ResultSet resultSet = statement.executeQuery();
+                if(resultSet.next()){
+                    String roomNote = resultSet.getString("NOTE");
+                    String roomType = resultSet.getString("ROOMTYPE");
+                    String roomPriceDay = resultSet.getString("PRICEDAY");
 
-                        roomCapacityField.setText(roomCapacity);
-                        roomPriceField.setText(roomPriceDay);
-                        roomTypeField.setText(roomType);
-                    } else {
-                        CommonTask.showAlert(Alert.AlertType.ERROR, "ERROR", "Can't get/set Info!");
-                    }
+                    roomNoteField.setText(roomNote);
+                    roomPriceField.setText(roomPriceDay);
+                    roomTypeField.setText(roomType);
+                } else {
+//                    CommonTask.showAlert(Alert.AlertType.ERROR, "ERROR", "Can't get/set Info!");
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            } finally {
-                DBConnection.closeConnections();
             }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            DBConnection.closeConnections();
         }
     }
 
@@ -96,12 +99,12 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         Connection connection = DBConnection.getConnections();
         try{
             if(!connection.isClosed()) {
-                String sql = "SELECT * FROM ROOMINFO WHERE STATUS = ?";
+                String sql = "SELECT * FROM ROOMINFO WHERE NOTE = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, "Available");
+                statement.setString(1, "Not Full");
                 ResultSet resultSet = statement.executeQuery();
                 while(resultSet.next()){
-                    rooms.add(resultSet.getString("ROOM_NO"));
+                    rooms.add(resultSet.getString("ROOMNO"));
                 }
             }
         } catch (SQLException e){
@@ -161,9 +164,9 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         String Address = addressField.getText();
         String RoomNo = roomChoiceBox.getValue() != null ? roomChoiceBox.getValue().toString() : null;
         String CheckInDate = UserCheckIndate.getValue() != null ? UserCheckIndate.getValue().toString() : null;
-        String roomCapacity = roomCapacityField.getText();
+        String roomNote = roomNoteField.getText();
         String roomType = roomTypeField.getText();
-        String roomPrice = roomPriceField.getText();
+        String roomPriceDay = roomPriceField.getText();
 
         if (name.isEmpty() || RoomNo == null || CheckInDate == null) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Name, Room No, and Check-In Date cannot be empty!");
@@ -171,7 +174,7 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         }
 
         try (Connection connection = DBConnection.getConnections()) {
-            String sql = "INSERT INTO CHECKINOUTINFO (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, CAPACITY, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO checkinoutinfo (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, name);
                 preparedStatement.setString(2, NID);
@@ -181,12 +184,11 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
                 preparedStatement.setString(6, RoomNo);
                 preparedStatement.setString(7, CheckInDate);
                 preparedStatement.setString(8, roomType);
-                preparedStatement.setString(9, roomCapacity);
-                preparedStatement.setString(10, roomPrice);
+                preparedStatement.setString(9, roomPriceDay);
 
                 preparedStatement.execute();
 
-                String sql1 = "UPDATE ROOMINFO SET STATUS = 'Booked' WHERE ROOM_NO = ?";
+                String sql1 = "UPDATE ROOMINFO SET STATUS = 'Full' WHERE ROOMNO = ?";
                 try (PreparedStatement preparedStatement1 = connection.prepareStatement(sql1)) {
                     preparedStatement1.setString(1, RoomNo);
                     preparedStatement1.execute();
@@ -214,7 +216,7 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         emailField.setText("");
         addressField.setText("");
         roomTypeField.setText("");
-        roomCapacityField.setText("");
+        roomNoteField.setText("");
         roomPriceField.setText("");
         UserCheckIndate.getEditor().clear();
 //        roomChoiceBox.setValue(null);

@@ -58,7 +58,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="332.0" layoutY="418.0" text="Bed Capacity  :">
+            <Label layoutX="332.0" layoutY="418.0" text="Note  :">
                <font>
                   <Font size="14.0" />
                </font>
@@ -99,7 +99,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="roomCapacityField" layoutX="446.0" layoutY="418.0" prefHeight="21.0" prefWidth="129.0">
+            <Label fx:id="roomNoteField" layoutX="446.0" layoutY="418.0" prefHeight="21.0" prefWidth="129.0">
                <font>
                   <Font size="14.0" />
                </font>
@@ -114,7 +114,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="roomChoiceBox" layoutX="445.0" layoutY="350.0" prefHeight="25.0" prefWidth="77.0" styleClass="combo-box" />
+            <JFXComboBox fx:id="roomChoiceBox" layoutX="445.0" layoutY="350.0" prefHeight="25.0" prefWidth="77.0" />
          </children></Pane>
       <TableView fx:id="customerTable" layoutX="8.0" layoutY="50.0" onMouseClicked="#onSelect" prefHeight="247.0" prefWidth="620.0">
         <columns>

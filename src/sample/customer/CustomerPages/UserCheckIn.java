@@ -56,6 +56,7 @@ public class UserCheckIn implements Initializable {
         userRoomChoicebox.setOnAction(this::setRoomInfo);
     }
 
+
     @FXML
     public void UserCheckInSubmitBtn(ActionEvent event) throws SQLException {
         String name = UserNameField.getText();
