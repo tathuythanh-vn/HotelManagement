@@ -23,7 +23,7 @@ public class RoomInfoEdit implements Initializable {
 
     public TextField roomNoField;
     public JFXComboBox roomTypeComboBox;
-    public TextField priceDayField;
+    public TextField priceDayArea;
     public JFXComboBox noteCbox;
     private String[] roomStats = {"Full", "Not Full"};
 
@@ -31,6 +31,7 @@ public class RoomInfoEdit implements Initializable {
         Stage stage = (Stage) UserConfirm.getScene().getWindow();
         stage.close();
     }
+
 
     private Connection connection = DBConnection.getConnections();
 
@@ -44,6 +45,8 @@ public class RoomInfoEdit implements Initializable {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         String parameterValue = resultSet.getString("PARAMETERVALUE");
+                        // Cập nhật giá trị của priceDayArea
+                        priceDayArea.setText(parameterValue);
                     }
                 }
             } catch (SQLException e) {
@@ -52,6 +55,8 @@ public class RoomInfoEdit implements Initializable {
         }
     }
 
+
+
     public void saveBtn(ActionEvent event) {
         Connection connection = getConnections();
         try {
@@ -59,7 +64,7 @@ public class RoomInfoEdit implements Initializable {
                 String sql = "UPDATE RoomInfo SET ROOMTYPE = ?, PRICEDAY = ?, NOTE = ? where ROOMNO = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, roomTypeComboBox.getValue()+"");
-                statement.setString(2, priceDayField.getText());
+                statement.setString(2, priceDayArea.getText());
                 statement.setString(3, noteCbox.getValue()+"");
                 statement.setString(4, roomNoField.getText());
                 statement.executeUpdate();
@@ -76,13 +81,16 @@ public class RoomInfoEdit implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         noteCbox.getItems().setAll(roomStats);
+        roomTypeComboBox.getItems().addAll("A", "B", "C");
+        roomTypeComboBox.setOnAction(event -> onComboBoxSelectionChanged());
+
     }
 
     public void setRoomInfo(String roomNo, String type, String priceDay, String note) {
         roomNoField.setText(roomNo);
         roomNoField.setDisable(true);
         roomTypeComboBox.setValue(type);
-        priceDayField.setText(priceDay);
+        priceDayArea.setText(priceDay);
         noteCbox.setValue(note);
     }
 }

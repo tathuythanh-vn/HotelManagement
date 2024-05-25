@@ -87,6 +87,12 @@
                             </color>
                         </DropShadow>
                     </effect>
+                    <style>
+                        .list-view .list-cell {
+                        -fx-text-fill: black; /* Màu chữ */
+                        -fx-background-color: white; /* Màu nền */
+                        }
+                    </style>
                 </JFXComboBox>
 <!--
                 <TextField fx:id="capacityField" layoutX="99.0" layoutY="120.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
@@ -99,7 +105,7 @@
                     </effect>
                 </TextField>
 -->
-                <TextField fx:id="priceDayField" layoutX="99.0" layoutY="164.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
+                <TextField fx:id="priceDayArea" editable="false" layoutX="99.0" layoutY="164.0" style="-fx-text-fill: white; -fx-background-color: #7f8fa650; -fx-background-radius: 7;">
                     <effect>
                         <DropShadow>
                             <color>
@@ -117,7 +123,7 @@
                         </DropShadow>
                     </effect>
                 </Button>
-            <JFXComboBox fx:id="noteCbox" layoutX="354.0" layoutY="108.0" prefHeight="25.0" prefWidth="120.0" />
+            <JFXComboBox fx:id="noteCbox"  layoutX="354.0" layoutY="108.0" prefHeight="25.0" prefWidth="120.0" />
             </children>
         </AnchorPane>
         <AnchorPane styleClass="titlePane" stylesheets="@CSS/ManagerMainTitlebarPane.css">
