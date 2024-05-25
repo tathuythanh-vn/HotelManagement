@@ -37,17 +37,17 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="576.0" layoutY="334.0" prefHeight="36.0" prefWidth="59.0" text="Taka">
+      <Label layoutX="576.0" layoutY="334.0" prefHeight="36.0" prefWidth="59.0" text="Vnd">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="576.0" layoutY="397.0" prefHeight="36.0" prefWidth="59.0" text="Taka">
+      <Label layoutX="576.0" layoutY="397.0" prefHeight="36.0" prefWidth="59.0" text="Vnd">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label layoutX="576.0" layoutY="458.0" prefHeight="36.0" prefWidth="59.0" text="Taka">
+      <Label layoutX="576.0" layoutY="458.0" prefHeight="36.0" prefWidth="59.0" text="Vnd">
          <font>
             <Font size="25.0" />
          </font>
