@@ -57,59 +57,89 @@ public class UserCheckIn implements Initializable {
     }
 
     @FXML
-    void UserCheckInSubmitBtn(ActionEvent event) throws SQLException {
+    public void UserCheckInSubmitBtn(ActionEvent event) throws SQLException {
         String name = UserNameField.getText();
         String NID = UserNIDField.getText();
         String Email = UserEmailField.getText();
         String Phone = UserPhoneField.getText();
         String address = UserAddressField.getText();
-        String RoomNo = userRoomChoicebox.getValue()+"";
-        String CheckInDate = UserCheckIndate.getValue()+"";
-        String roomNote = roomNoteField.getText()+"";
-        String roomStatus = roomStatusField.getText()+"";
-        String roomType = roomTypeField.getText()+"";
-        String roomPrice = roomPriceField.getText()+"";
+        String RoomNo = userRoomChoicebox.getValue() + "";
+        String CheckInDate = UserCheckIndate.getValue() + "";
+        String roomNote = roomNoteField.getText() + "";
+        String roomStatus = roomStatusField.getText() + "";
+        String roomType = roomTypeField.getText() + "";
+        String roomPrice = roomPriceField.getText() + "";
 
+        // Kiểm tra kết nối
         Connection connection = DBConnection.getConnections();
-        if (roomType.equals("") || roomPrice.equals("") || roomStatus.equals("") || CheckInDate.equals("null")) {
-//            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
+        if (connection == null || connection.isClosed()) {
+            CommonTask.showJFXAlert(rootPane, userCheckInPane, "error", "Error", "Cannot establish connection to the database!", JFXDialog.DialogTransition.CENTER);
+            return;
+        }
+
+        // Kiểm tra các giá trị đầu vào
+        if (roomType.isEmpty() || roomPrice.isEmpty() || roomStatus.isEmpty() || CheckInDate.equals("null")) {
             CommonTask.showJFXAlert(rootPane, userCheckInPane, "warning", "Warning!", "Field Can't be Empty!", JFXDialog.DialogTransition.CENTER);
-        } else {
-            String sql = "INSERT INTO ROOMRENTALFORM (ROOMNO,STARTDAY) VALUES(?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            return;
+        }
+
+        String sql = "INSERT INTO ROOMRENTALFORM (ROOMNO, STARTDATE) VALUES (?, ?)";
+        String sql1 = "INSERT INTO ROOMRENTALFORMDETAIL (ROOMFORMNO, NID, NAME, CUSTOMERTYPEID, CITIZENID, ADDRESS) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql2 = "UPDATE ROOMINFO SET STATUS = ? WHERE ROOMNO = ?";
+
+        try {
+            // Bắt đầu transaction
+            connection.setAutoCommit(false);
+
+            // Thực hiện chèn vào ROOMRENTALFORM
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, RoomNo);
             preparedStatement.setString(2, CheckInDate);
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                // Lấy RoomFormNo (giả sử có khóa chính tự động tăng)
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int currentFormNo = generatedKeys.getInt(1);
 
-            String sql1 = "INSERT INTO ROOMRENTALFORMDETAIL (ROOMFORMNO, NID, NAME, CUSTOMERTYPEID, CITIZENID, ADDRESS) VALUES(?,?,?,?,?,?)";
-            PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
-            preparedStatement1.setString(1, String.valueOf(currentFormNo));
-            preparedStatement1.setString(2, NID);
-            preparedStatement1.setString(3, name);
-            preparedStatement1.setString(4, customerTypeID);
-            preparedStatement1.setString(5, citizenID);
-            preparedStatement1.setString(6, address);
+                    // Thực hiện chèn vào ROOMRENTALFORMDETAIL
+                    PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
+                    preparedStatement1.setInt(1, currentFormNo);
+                    preparedStatement1.setString(2, NID);
+                    preparedStatement1.setString(3, name);
+                    preparedStatement1.setString(4, customerTypeID); // Đảm bảo biến này được định nghĩa và có giá trị
+                    preparedStatement1.setString(5, citizenID); // Đảm bảo biến này được định nghĩa và có giá trị
+                    preparedStatement1.setString(6, address);
+                    preparedStatement1.executeUpdate();
 
-            try{
-//                preparedStatement.execute();
+                    // Cập nhật trạng thái phòng
+                    PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+                    preparedStatement2.setString(1, "Occupied"); // hoặc giá trị trạng thái mới thích hợp
+                    preparedStatement2.setString(2, RoomNo);
+                    preparedStatement2.executeUpdate();
 
-                preparedStatement1.execute();
-
-                String sql2 = "UPDATE ROOMINFO SET STATUS = 'roomCurrentStatus' WHERE ROOMNO = ?";
-                PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
-                preparedStatement1.setString(1, RoomNo);
-                preparedStatement1.execute();
-//                CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Check-in Successful!");
-
-                CommonTask.showJFXAlert(rootPane, userCheckInPane, "information", "Successful!", "Check In Successful!", JFXDialog.DialogTransition.CENTER);
-            } catch (SQLException e){
-                CommonTask.showJFXAlert(rootPane, userCheckInPane, "information", "Error!", "SQL Exception Happened!", JFXDialog.DialogTransition.CENTER);
-            } finally {
-                DBConnection.closeConnections();
+                    // Commit transaction
+                    connection.commit();
+                    CommonTask.showJFXAlert(rootPane, userCheckInPane, "information", "Successful!", "Check In Successful!", JFXDialog.DialogTransition.CENTER);
+                } else {
+                    throw new SQLException("Failed to retrieve RoomFormNo.");
+                }
             }
+        } catch (SQLException e) {
+            connection.rollback();
+            e.printStackTrace();
+            CommonTask.showJFXAlert(rootPane, userCheckInPane, "error", "Error!", "SQL Exception: " + e.getMessage(), JFXDialog.DialogTransition.CENTER);
+        } finally {
+            connection.setAutoCommit(true);
+            DBConnection.closeConnections();
         }
+
         updateChoiceBox();
         clearTextFields();
     }
+
+
+
 
     private void findMaxPeople() {
         Connection connection = DBConnection.getConnections();
