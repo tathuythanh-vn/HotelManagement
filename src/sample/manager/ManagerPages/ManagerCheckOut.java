@@ -135,39 +135,53 @@ public class ManagerCheckOut extends DBConnection implements Initializable {
         siNoField.setText(siCol.getCellData(selectIndex).toString());
     }
 
-    public void checkOutBtn(ActionEvent actionEvent) throws SQLException {
-        Connection connection = DBConnection.getConnections();
-        String checkOutDate = checkOutDatepicker.getValue() + "";
+    public void checkOutBtn(ActionEvent actionEvent) {
+        String checkOutDate = checkOutDatepicker.getValue() != null ? checkOutDatepicker.getValue().toString() : null;
         String daysTotal = daysTotalField.getText();
         String totalPrice = totalPriceField.getText();
         String roomNo = roomNoField.getText();
         String siNo = siNoField.getText();
-        if (siNo.equals("") || checkOutDate.equals("null") || daysTotal.isEmpty() || totalPrice.isEmpty()) {
-            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
-        } else {
-            String sql = "UPDATE CHECKINOUTINFO SET CHECKEDOUT = ?, TOTALDAYS = ?, TOTALPRICE = ? WHERE SI_NO = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, checkOutDate);
-            preparedStatement.setString(2, daysTotal);
-            preparedStatement.setString(3, totalPrice);
-            preparedStatement.setString(4, siNo);
-            try {
-                preparedStatement.execute();
-                CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Check-Out Successful!");
-                String sql1 = "UPDATE ROOMINFO SET STATUS = ? WHERE ROOM_NO = ?";
-                PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
-                preparedStatement1.setString(1, "Available");
-                preparedStatement1.setString(2, roomNo);
-                preparedStatement1.execute();
-                showCheckedInTable();
-            } catch (SQLException e) {
-                CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Exception detected. Probably Sql!");
-            } finally {
-                DBConnection.closeConnections();
-            }
+
+        if (siNo.isEmpty() || checkOutDate == null || daysTotal.isEmpty() || totalPrice.isEmpty()) {
+            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Please fill in all fields.");
+            return;
         }
-        clearTextFields();
+
+        try (Connection connection = DBConnection.getConnections()) {
+            String sql = "UPDATE CHECKINOUTINFO SET CHECKEDOUT = ?, TOTALDAYS = ?, TOTALPRICE = ? WHERE SI_NO = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, checkOutDate);
+                preparedStatement.setString(2, daysTotal);
+                preparedStatement.setString(3, totalPrice);
+                preparedStatement.setString(4, siNo);
+
+                int rowsUpdated = preparedStatement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    CommonTask.showAlert(Alert.AlertType.INFORMATION, "Success", "Check-out successful!");
+
+                    String sql1 = "UPDATE ROOMINFO SET STATUS = 'Available' WHERE ROOM_NO = ?";
+                    try (PreparedStatement preparedStatement1 = connection.prepareStatement(sql1)) {
+                        preparedStatement1.setString(1, roomNo);
+                        preparedStatement1.executeUpdate();
+                    } catch (SQLException e) {
+                        CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Failed to update room status!");
+                    }
+
+                    showCheckedInTable();
+                } else {
+                    CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Failed to check-out!");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "An error occurred. Please try again later.");
+        } finally {
+            clearTextFields();
+            DBConnection.closeConnections();
+        }
     }
+
+
 
     private void clearTextFields() {
         siNoField.setText("");

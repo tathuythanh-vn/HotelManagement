@@ -58,12 +58,8 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="332.0" layoutY="418.0" text="Bed Capacity  :">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="332.0" layoutY="485.0" text="Check In Date :">
+
+            <Label layoutX="332.0" layoutY="452.0" text="Check In Date :">
                <font>
                   <Font size="14.0" />
                </font>
@@ -93,23 +89,19 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <DatePicker fx:id="UserCheckIndate" layoutX="435.0" layoutY="480.0" prefHeight="25.0" prefWidth="129.0" />
+            <DatePicker fx:id="UserCheckIndate" layoutX="435.0" layoutY="452.0" prefHeight="25.0" prefWidth="129.0" />
             <Label fx:id="roomTypeField" layoutX="447.0" layoutY="383.0" prefHeight="21.0" prefWidth="129.0">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="roomCapacityField" layoutX="446.0" layoutY="418.0" prefHeight="21.0" prefWidth="129.0">
+
+            <Label layoutX="332.0" layoutY="418.0" text="Price/Day        :">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="332.0" layoutY="452.0" text="Price/Day        :">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="roomPriceField" layoutX="446.0" layoutY="452.0" prefHeight="21.0" prefWidth="129.0">
+            <Label fx:id="roomPriceField" layoutX="446.0" layoutY="418.0" prefHeight="21.0" prefWidth="129.0">
                <font>
                   <Font size="14.0" />
                </font>

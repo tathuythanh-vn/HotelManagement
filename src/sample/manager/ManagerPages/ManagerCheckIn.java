@@ -153,51 +153,59 @@ public class ManagerCheckIn extends DBConnection implements Initializable {
         addressField.setText(addressCol.getCellData(selectIndex).toString());
     }
 
-    public void checkInButton(ActionEvent actionEvent) throws SQLException {
+    public void checkInButton(ActionEvent actionEvent) {
         String name = nameField.getText();
         String NID = nidField.getText();
         String Email = emailField.getText();
         String Phone = phoneField.getText();
         String Address = addressField.getText();
-        String RoomNo = roomChoiceBox.getValue()+"";
-        String CheckInDate = UserCheckIndate.getValue()+"";
+        String RoomNo = roomChoiceBox.getValue() != null ? roomChoiceBox.getValue().toString() : null;
+        String CheckInDate = UserCheckIndate.getValue() != null ? UserCheckIndate.getValue().toString() : null;
         String roomCapacity = roomCapacityField.getText();
         String roomType = roomTypeField.getText();
         String roomPrice = roomPriceField.getText();
-        System.out.println(roomCapacity +" "+roomType+" "+roomPrice);
-       // System.out.println(name+" "+RoomNo+" "+CheckInDate);
-        Connection connection = DBConnection.getConnections();
-        if (name.isEmpty() || RoomNo.equals("null") || CheckInDate.equals("null")) {
-            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
-        } else {
+
+        if (name.isEmpty() || RoomNo == null || CheckInDate == null) {
+            CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Name, Room No, and Check-In Date cannot be empty!");
+            return;
+        }
+
+        try (Connection connection = DBConnection.getConnections()) {
             String sql = "INSERT INTO CHECKINOUTINFO (NAME, NID, EMAIL, PHONE, ADDRESS, ROOMNO, CHECKEDIN, ROOMTYPE, CAPACITY, PRICEDAY) VALUES(?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, NID);
-            preparedStatement.setString(3, Email);
-            preparedStatement.setString(4, Phone);
-            preparedStatement.setString(5, Address);
-            preparedStatement.setString(6, RoomNo);
-            preparedStatement.setString(7, CheckInDate);
-            preparedStatement.setString(8, roomType);
-            preparedStatement.setString(9, roomCapacity);
-            preparedStatement.setString(10, roomPrice);
-            try{
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, name);
+                preparedStatement.setString(2, NID);
+                preparedStatement.setString(3, Email);
+                preparedStatement.setString(4, Phone);
+                preparedStatement.setString(5, Address);
+                preparedStatement.setString(6, RoomNo);
+                preparedStatement.setString(7, CheckInDate);
+                preparedStatement.setString(8, roomType);
+                preparedStatement.setString(9, roomCapacity);
+                preparedStatement.setString(10, roomPrice);
+
                 preparedStatement.execute();
+
                 String sql1 = "UPDATE ROOMINFO SET STATUS = 'Booked' WHERE ROOM_NO = ?";
-                PreparedStatement preparedStatement1 = connection.prepareStatement(sql1);
-                preparedStatement1.setString(1, RoomNo);
-                preparedStatement1.execute();
+                try (PreparedStatement preparedStatement1 = connection.prepareStatement(sql1)) {
+                    preparedStatement1.setString(1, RoomNo);
+                    preparedStatement1.execute();
+                } catch (SQLException e) {
+                    CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "Failed to update room status!");
+                }
+
                 CommonTask.showAlert(Alert.AlertType.INFORMATION, "Successful", "Check-in Successful!");
-            } catch (SQLException e){
+                updateChoiceBox();
+                clearTextFields();
+            } catch (SQLException e) {
                 CommonTask.showAlert(Alert.AlertType.ERROR, "Error", "SQL Exception found!");
-            } finally {
-                DBConnection.closeConnections();
             }
-            updateChoiceBox();
-            clearTextFields();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+
 
     private void clearTextFields() {
         nidField.setText("");
