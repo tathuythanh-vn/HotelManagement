@@ -94,9 +94,9 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
         }
 
         String roomNo = roomNoField.getText();
-        String roomType = roomTypeComboBox.getValue()+"";
+        String roomType = roomTypeComboBox.getValue() + "";
         String price_day = price_dayArea.getText();
-        String roomNote = roomNoteChoiceBox.getValue()+"";
+        String roomNote = roomNoteChoiceBox.getValue() + "";
 
         if (roomNo.isEmpty() || roomType == null || price_day.isEmpty() || roomNote == null) {
             CommonTask.showAlert(Alert.AlertType.WARNING, "Error", "Field can't be empty!");
@@ -115,12 +115,13 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
             return;
         }
 
-        String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICEDAY, NOTE) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO ROOMINFO (ROOMNO, ROOMTYPE, PRICEDAY, NOTE, STATUS) VALUES(?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, roomNo);
         preparedStatement.setString(2, roomType);
         preparedStatement.setString(3, price_day);
         preparedStatement.setString(4, roomNote);
+        preparedStatement.setInt(5, 0); // Thiết lập giá trị STATUS = 0 khi tạo mới
 
         try {
             int rowsAffected = preparedStatement.executeUpdate();
@@ -137,6 +138,7 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
             closeConnections();
         }
     }
+
 
 
 
@@ -166,8 +168,9 @@ public class ManagerManageRooms extends DBConnection implements Initializable {
                     String ROOMTYPE = resultSet.getString("ROOMTYPE");
                     String PRICE_DAY = resultSet.getString("PRICEDAY");
                     String NOTE = resultSet.getString("NOTE");
+                    String STATUS = resultSet.getString("STATUS");
 
-                    ManagerRoomTable roomTablee = new ManagerRoomTable(ROOMNO, ROOMTYPE, PRICE_DAY, NOTE);
+                    ManagerRoomTable roomTablee = new ManagerRoomTable(ROOMNO, ROOMTYPE, PRICE_DAY, NOTE, STATUS);
 
                     TABLEROW.add(roomTablee);
                 }

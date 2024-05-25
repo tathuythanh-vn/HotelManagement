@@ -5,12 +5,14 @@ public class ManagerRoomTable {
     String ROOMTYPE;
     String PRICEDAY;
     String NOTE;
+    String STATUS;
 
-    public ManagerRoomTable(String ROOMNO, String ROOMTYPE, String PRICEDAY, String NOTE){
+    public ManagerRoomTable(String ROOMNO, String ROOMTYPE, String PRICEDAY, String NOTE, String STATUS){
         this.ROOMNO = ROOMNO;
         this.ROOMTYPE = ROOMTYPE;
         this.PRICEDAY = PRICEDAY;
         this.NOTE = NOTE;
+        this.STATUS = STATUS;
     }
 
     public String getROOMNO() {
@@ -44,5 +46,13 @@ public class ManagerRoomTable {
 
     public void setNOTE(String NOTE) {
         this.NOTE = NOTE;
+    }
+
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.NOTE = STATUS;
     }
 }

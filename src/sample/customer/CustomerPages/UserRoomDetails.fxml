@@ -14,7 +14,7 @@
             <TableColumn fx:id="roomNoCol" prefWidth="124.0" text="RoomNo" />
             <TableColumn fx:id="roomTypeCol" prefWidth="108.0" text="Type" />
             <TableColumn fx:id="price_DayCol" prefWidth="122.0" text="Price/Day" />
-            <TableColumn fx:id="roomStatusCol" minWidth="0.0" prefWidth="139.0" text="RoomStatus" />
+            <TableColumn fx:id="roomStatusCol" minWidth="0.0" prefWidth="139.0" text="Customer" />
             <TableColumn fx:id="roomNote" prefWidth="113.0" text="Note" />
         </columns>
       </TableView>
